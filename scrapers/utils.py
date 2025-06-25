@@ -27,11 +27,18 @@ class ScrapingUtils:
         import unicodedata
         text = unicodedata.normalize('NFKD', str(text))
 
-        # Gereksiz whitespace'leri temizle
-        text = re.sub(r'\s+', ' ', text.strip())
+        # HTML entities'leri decode et
+        import html
+        text = html.unescape(text)
 
-        # Özel karakterleri temizle
-        text = re.sub(r'[^\w\s\-\.\,\(\)]', '', text)
+        # Çoklu whitespace'leri tek space'e çevir
+        text = re.sub(r'\s+', ' ', text)
+
+        # Satır başı ve sonundaki boşlukları temizle
+        text = text.strip()
+
+        # Gereksiz noktalama işaretlerini temizle (ama bazılarını koru)
+        # text = re.sub(r'[^\w\s\-\.\,\(\)\'\"]', '', text)
 
         return text
 
@@ -42,19 +49,42 @@ class ScrapingUtils:
             if not age_text:
                 return 0
 
-            # "29-123" formatından sadece yaşı al
-            if '-' in str(age_text):
-                age_part = str(age_text).split('-')[0]
+            age_str = str(age_text).strip()
+
+            # "29-123" formatından sadece yaşı al (29-123 formatında 29 yaş, 123 gün)
+            if '-' in age_str:
+                age_part = age_str.split('-')[0]
             else:
-                age_part = str(age_text)
+                age_part = age_str
+
+            # "(age 32)" formatını handle et
+            age_match = re.search(r'\(age\s+(\d+)\)', age_part)
+            if age_match:
+                age = int(age_match.group(1))
+                if 15 <= age <= 50:
+                    return age
+
+            # "Age: 32" formatını handle et
+            age_match = re.search(r'age[:\s]+(\d+)', age_part.lower())
+            if age_match:
+                age = int(age_match.group(1))
+                if 15 <= age <= 50:
+                    return age
 
             # Sadece sayıları çıkar
-            age_match = re.search(r'\d+', age_part)
+            age_match = re.search(r'(\d+)', age_part)
             if age_match:
-                age = int(age_match.group())
+                age = int(age_match.group(1))
                 # Mantıklı yaş aralığı kontrolü
                 if 15 <= age <= 50:
                     return age
+                # Eğer çok büyük bir sayı ise (doğum yılı olabilir), yaşa çevir
+                elif 1970 <= age <= 2010:
+                    from datetime import datetime
+                    current_year = datetime.now().year
+                    calculated_age = current_year - age
+                    if 15 <= calculated_age <= 50:
+                        return calculated_age
 
             return 0
         except Exception as e:

@@ -46,3 +46,24 @@
 2025-06-25 14:34:56,594 - __main__ - INFO - Yaş: 400
 2025-06-25 14:34:56,594 - __main__ - INFO - ==================================================
 2025-06-25 14:34:58,801 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 14:47:19,461 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 14:47:19,462 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:47:19,462 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:47:23,216 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:47:23,219 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 14:47:24,035 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:47:24,221 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:47:24,423 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 14:47:38,596 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 14:47:45,875 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33
+2025-06-25 14:47:49,935 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 14:47:55,494 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 14:47:55,494 - __main__ - INFO - ==================================================
+2025-06-25 14:47:55,495 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 14:47:55,495 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 14:47:55,495 - __main__ - INFO - Takım: Liverpool
+2025-06-25 14:47:55,495 - __main__ - INFO - Lig: Premier League
+2025-06-25 14:47:55,495 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-25 14:47:55,495 - __main__ - INFO - Yaş: 33
+2025-06-25 14:47:55,496 - __main__ - INFO - ==================================================
+2025-06-25 14:47:57,712 - __main__ - INFO - Kaynaklar temizlendi

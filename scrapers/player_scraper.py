@@ -3,7 +3,7 @@ import logging
 from .base_scraper import BaseScraper
 from .utils import ScrapingUtils
 from config.settings import Settings
-from config.leagues import LEAGUE_COUNTRIES
+from config.leagues import LEAGUE_COUNTRIES, LEAGUES
 from models.player import PlayerModel
 import re
 from urllib.parse import urljoin
@@ -86,37 +86,83 @@ class PlayerScraper(BaseScraper):
                 bio_items = meta_div.find_all('p')
 
                 for item in bio_items:
-                    text = item.get_text().lower()
+                    text = item.get_text().strip()
+                    text_lower = text.lower()
 
-                    if 'age' in text:
-                        age_match = re.search(r'age\s*:?\s*(\d+)', text)
+                    # Yaş parsing - daha doğru regex ile
+                    if 'born:' in text_lower or 'age:' in text_lower:
+                        # "Born: June 15, 1992 (age 32)" formatı
+                        age_match = re.search(r'\(age\s+(\d+)\)', text)
                         if not age_match:
-                            age_match = re.search(r'(\d+)', text)
-                        age = int(age_match.group(1)) if age_match else 0
+                            # "Age: 32" formatı
+                            age_match = re.search(r'age[:\s]+(\d+)', text_lower)
+                        if not age_match:
+                            # Sadece sayı varsa ve mantıklı aralıkta
+                            numbers = re.findall(r'\b(\d+)\b', text)
+                            for num in numbers:
+                                num_int = int(num)
+                                if 15 <= num_int <= 45:  # Futbolcu yaş aralığı
+                                    age = num_int
+                                    break
+                        else:
+                            age_val = int(age_match.group(1))
+                            if 15 <= age_val <= 45:
+                                age = age_val
 
-                    elif any(keyword in text for keyword in ['club', 'team', 'current team']):
+                    # Takım bilgisi - daha geniş arama
+                    elif any(keyword in text_lower for keyword in ['club:', 'team:', 'current club:', 'plays for:']):
                         team_link = item.find('a')
                         if team_link:
                             team = self.utils.clean_text(team_link.text)
                         else:
                             # Link yoksa text'ten çıkar
-                            team_text = re.sub(r'(club|team|current team)[:\s]*', '', text, flags=re.IGNORECASE)
-                            team = self.utils.clean_text(team_text)
+                            team_patterns = [
+                                r'club[:\s]+([^,\n]+)',
+                                r'team[:\s]+([^,\n]+)',
+                                r'plays for[:\s]+([^,\n]+)'
+                            ]
+                            for pattern in team_patterns:
+                                team_match = re.search(pattern, text_lower)
+                                if team_match:
+                                    team = self.utils.clean_text(team_match.group(1))
+                                    break
 
-                    elif 'position' in text:
-                        position_text = re.sub(r'position[:\s]*', '', text, flags=re.IGNORECASE)
-                        position = self.utils.clean_text(position_text)
+                    # Pozisyon bilgisi - daha temiz parsing
+                    elif 'position:' in text_lower:
+                        position_match = re.search(r'position[:\s]+([^,\n]+)', text_lower)
+                        if position_match:
+                            position_raw = position_match.group(1)
+                            # "fw-mf (am-wm, right) footed left" gibi karmaşık metni temizle
+                            position = re.sub(r'\s+footed\s+\w+', '', position_raw).strip()
+                            position = self.utils.clean_text(position)
 
-                    elif 'contract' in text:
-                        contract_match = re.search(r'(\d{4})', text)
-                        contract_end = contract_match.group(1) if contract_match else ""
+                    # Kontrat sonu
+                    elif any(keyword in text_lower for keyword in ['contract:', 'expires:', 'until:']):
+                        # "Contract until June 2025" veya "Expires: 2025"
+                        contract_patterns = [
+                            r'until[:\s]+.*?(\d{4})',
+                            r'expires[:\s]+.*?(\d{4})',
+                            r'contract[:\s]+.*?(\d{4})'
+                        ]
+                        for pattern in contract_patterns:
+                            contract_match = re.search(pattern, text_lower)
+                            if contract_match:
+                                year = int(contract_match.group(1))
+                                if 2024 <= year <= 2035:  # Mantıklı yıl aralığı
+                                    contract_end = str(year)
+                                    break
 
-                # Takım linkinden lig bilgisini çıkarmaya çalış
+            # Takım linkinden lig bilgisini çıkarmaya çalış
+            if meta_div:
                 team_links = meta_div.find_all('a', href=re.compile(r'/squads/'))
                 for team_link in team_links:
                     team_href = team_link.get('href', '')
-                    # Squad URL'sinden lig bilgisini çıkar
                     if '/squads/' in team_href:
+                        # Takım adını da burada al eğer henüz yoksa
+                        if not team:
+                            team = self.utils.clean_text(team_link.text)
+
+                        # Lig bilgisini çıkar
                         league = self.extract_league_from_team_url(team_href, soup)
                         if league:
                             break
@@ -127,22 +173,29 @@ class PlayerScraper(BaseScraper):
 
             # Basic info'dan gelen veriler varsa kullan (öncelik)
             if basic_info:
-                team = basic_info.get('team', team) or team
-                age = basic_info.get('age', age) or age
-                position = basic_info.get('position', position) or position
-                league = basic_info.get('league', league) or league
-                country = basic_info.get('country', country) or country
+                # Sadece boşsa basic_info'dan al
+                team = team or basic_info.get('team', '')
+                age = age or basic_info.get('age', 0)
+                position = position or basic_info.get('position', '')
+                league = league or basic_info.get('league', '')
+                country = country or basic_info.get('country', '')
 
             # Ülke bilgisini lig'den çıkar
             if league and not country:
                 country = LEAGUE_COUNTRIES.get(league, '')
 
-            # Lig bilgisi hala yoksa default değer ver
+            # Lig bilgisi hala yoksa takımdan tahmin et
+            if not league and team:
+                league = self.guess_league_from_team(team)
+
+            # Son kontrollar ve default değerler
             if not league:
-                if team:
-                    league = self.guess_league_from_team(team)
-                else:
-                    league = "Unknown League"
+                league = "Unknown League"
+            if not team:
+                team = "Unknown Team"
+            if age == 0:
+                # Yaş hala 0 ise alternatif yöntemlerle bul
+                age = self.extract_age_from_birth_date(soup)
 
             # Player model'e ayarla
             player.set_basic_info(full_name, age, team, league, fbref_id)
@@ -153,10 +206,53 @@ class PlayerScraper(BaseScraper):
             # Fotoğraf
             self.extract_player_photo(soup, player)
 
-            logging.info(f"Temel bilgiler çıkarıldı: {full_name}, {team}, {league}")
+            logging.info(f"Temel bilgiler çıkarıldı: {full_name}, {team}, {league}, Yaş: {age}")
 
         except Exception as e:
             logging.error(f"Temel bilgi çekme hatası: {e}")
+
+    def extract_age_from_birth_date(self, soup):
+        """Doğum tarihinden yaş hesaplar"""
+        try:
+            from datetime import datetime
+
+            # Doğum tarihi bilgisini ara
+            meta_div = soup.find('div', {'id': 'meta'})
+            if not meta_div:
+                return 0
+
+            text = meta_div.get_text()
+
+            # Çeşitli doğum tarihi formatları
+            birth_patterns = [
+                r'born[:\s]+\w+\s+(\d{1,2}),\s+(\d{4})',  # "Born: June 15, 1992"
+                r'(\d{1,2})\s+\w+\s+(\d{4})',  # "15 June 1992"
+                r'(\d{4})-(\d{1,2})-(\d{1,2})',  # "1992-06-15"
+            ]
+
+            current_year = datetime.now().year
+
+            for pattern in birth_patterns:
+                matches = re.findall(pattern, text.lower())
+                for match in matches:
+                    try:
+                        if len(match) == 2:  # month day, year format
+                            birth_year = int(match[1])
+                        elif len(match) == 3:  # year-month-day format
+                            birth_year = int(match[0])
+                        else:
+                            continue
+
+                        age = current_year - birth_year
+                        if 15 <= age <= 45:  # Mantıklı yaş aralığı
+                            return age
+                    except (ValueError, IndexError):
+                        continue
+
+            return 0
+        except Exception as e:
+            logging.error(f"Doğum tarihinden yaş hesaplama hatası: {e}")
+            return 0
 
     def extract_league_from_team_url(self, team_href, soup):
         """Takım URL'sinden lig bilgisini çıkarır"""
@@ -185,31 +281,60 @@ class PlayerScraper(BaseScraper):
             return None
 
     def detect_league_from_page(self, soup):
-        """Sayfa içeriğinden lig bilgisini tespit eder"""
+        """Sayfa içeriğinden lig bilgisini tespit eder - Enhanced"""
         try:
-            # Breadcrumb linklerinden lig bul
-            breadcrumb_links = soup.find_all('a', href=re.compile(r'/comps/\d+/'))
-            for link in breadcrumb_links:
-                link_text = link.get_text().strip()
-                league = self.match_league_name(link_text)
-                if league:
-                    return league
+            # 1. Breadcrumb linklerinden lig bul
+            breadcrumb_selectors = [
+                'div.breadcrumb a',
+                'nav a',
+                '.nav-bar a',
+                'a[href*="/comps/"]'
+            ]
 
-            # Meta bilgilerden lig bul
+            for selector in breadcrumb_selectors:
+                links = soup.select(selector)
+                for link in links:
+                    href = link.get('href', '')
+                    if '/comps/' in href:
+                        link_text = link.get_text().strip()
+                        league = self.match_league_name(link_text)
+                        if league:
+                            return league
+
+            # 2. Takım sayfası linklerinden lig bilgisi çıkar
+            team_links = soup.find_all('a', href=re.compile(r'/squads/'))
+            for link in team_links:
+                # Takım sayfasına git ve lig bilgisini al
+                team_href = link.get('href')
+                if team_href:
+                    league = self.extract_league_from_team_url(team_href, soup)
+                    if league:
+                        return league
+
+            # 3. Meta tags'den lig bul
             meta_tags = soup.find_all('meta')
             for meta in meta_tags:
                 content = meta.get('content', '').lower()
-                if any(league.lower() in content for league in
-                       ['premier league', 'la liga', 'serie a', 'bundesliga', 'ligue 1']):
-                    for league_name in ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Ligue 1']:
-                        if league_name.lower() in content:
-                            return league_name
+                description = meta.get('name', '').lower()
 
-            # Sayfa başlığından lig bul
+                if 'description' in description or 'keywords' in description:
+                    league = self.match_league_name(content)
+                    if league:
+                        return league
+
+            # 4. Sayfa başlığından lig bul
             title = soup.find('title')
             if title:
-                title_text = title.get_text().lower()
-                return self.match_league_name(title_text)
+                title_text = title.get_text()
+                league = self.match_league_name(title_text)
+                if league:
+                    return league
+
+            # 5. Sayfa içindeki tüm metinden lig ismi ara
+            page_text = soup.get_text().lower()
+            for league_name in LEAGUES.keys():
+                if league_name.lower() in page_text:
+                    return league_name
 
             return None
         except Exception as e:
@@ -217,8 +342,11 @@ class PlayerScraper(BaseScraper):
             return None
 
     def match_league_name(self, text):
-        """Text'den lig ismini eşleştirir"""
+        """Text'den lig ismini eşleştirir - Enhanced"""
         try:
+            if not text:
+                return None
+
             from config.leagues import LEAGUES
             text_lower = text.lower()
 
@@ -227,18 +355,33 @@ class PlayerScraper(BaseScraper):
                 if league_name.lower() in text_lower:
                     return league_name
 
-            # Kısmi eşleşmeler
+            # Gelişmiş kısmi eşleşmeler
             league_mappings = {
-                'premier': 'Premier League',
+                'premier league': 'Premier League',
                 'epl': 'Premier League',
+                'english premier': 'Premier League',
                 'la liga': 'La Liga',
+                'primera division': 'La Liga',
                 'serie a': 'Serie A',
+                'italian serie a': 'Serie A',
                 'bundesliga': 'Bundesliga',
+                'german bundesliga': 'Bundesliga',
                 'ligue 1': 'Ligue 1',
+                'french ligue 1': 'Ligue 1',
                 'süper lig': 'Trendyol Süper Lig',
+                'super lig': 'Trendyol Süper Lig',
+                'turkish super': 'Trendyol Süper Lig',
                 'eredivisie': 'Eredivisie',
+                'dutch eredivisie': 'Eredivisie',
                 'championship': 'Championship',
-                'liga portugal': 'Liga Portugal Betclic'
+                'english championship': 'Championship',
+                'liga portugal': 'Liga Portugal Betclic',
+                'portuguese liga': 'Liga Portugal Betclic',
+                'primeira liga': 'Liga Portugal Betclic',
+                'mls': 'MLS',
+                'major league soccer': 'MLS',
+                'saudi pro': 'Saudi Pro League',
+                'saudi professional': 'Saudi Pro League'
             }
 
             for keyword, league_name in league_mappings.items():
