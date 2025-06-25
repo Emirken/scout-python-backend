@@ -1,0 +1,7 @@
+2025-06-25 14:16:04,159 - INFO - Veritabaný baðlantýsý baþarýlý
+2025-06-25 14:16:04,159 - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:16:04,159 - INFO - Oyuncu detaylarý çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:16:04,247 - ERROR - Sayfa getirme hatasý (https://fbref.com/en/players/e342ad68/Mohamed-Salah): 403 Client Error: Forbidden for url: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:16:04,248 - ERROR - Oyuncu sayfasý getirilemedi: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:16:04,248 - ERROR - Oyuncu detaylarý çekilemedi
+2025-06-25 14:16:04,249 - INFO - Kaynaklar temizlendi
