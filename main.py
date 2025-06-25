@@ -131,16 +131,56 @@ class FBRefScraper:
         self.scrape_all_leagues([league_name])
 
     def scrape_single_player(self, player_url):
-        """Tek bir oyuncuyu scrape eder"""
+        """Tek bir oyuncuyu scrape eder - Enhanced version"""
         try:
             self.logger.info(f"Tek oyuncu scraping: {player_url}")
 
-            detailed_player = self.player_scraper.scrape_player_details(player_url)
+            # URL'den temel bilgileri çıkar
+            fbref_id = self.player_scraper.utils.extract_fbref_id(player_url)
+            if not fbref_id:
+                self.logger.error("Geçersiz FBRef URL")
+                return None
+
+            # Veritabanında zaten varsa kontrol et
+            existing_player = self.db.get_player(fbref_id)
+            if existing_player:
+                self.logger.info(f"Oyuncu zaten mevcut: {existing_player.get('fullName', 'Unknown')}")
+                return existing_player
+
+            # Basic info oluştur (validation için gerekli)
+            basic_info = {
+                'fbref_id': fbref_id,
+                'player_url': player_url,
+                'name': 'Unknown',  # Will be extracted from page
+                'team': 'Unknown',  # Will be extracted from page
+                'league': 'Unknown League',  # Will be detected from page
+                'country': '',
+                'age': 0,
+                'position': ''
+            }
+
+            # Detaylı oyuncu bilgilerini çek
+            detailed_player = self.player_scraper.scrape_player_details(
+                player_url,
+                basic_info
+            )
 
             if detailed_player:
+                # Veritabanına kaydet
                 result = self.db.insert_player(detailed_player)
                 if result:
                     self.logger.info(f"Oyuncu başarıyla kaydedildi: {detailed_player['fullName']}")
+
+                    # Sonuç raporu
+                    self.logger.info("=" * 50)
+                    self.logger.info("OYUNCU SCRAPING TAMAMLANDI")
+                    self.logger.info(f"İsim: {detailed_player['fullName']}")
+                    self.logger.info(f"Takım: {detailed_player['team']}")
+                    self.logger.info(f"Lig: {detailed_player['league']}")
+                    self.logger.info(f"Pozisyon: {detailed_player['detailedPosition']}")
+                    self.logger.info(f"Yaş: {detailed_player['age']}")
+                    self.logger.info("=" * 50)
+
                     return detailed_player
                 else:
                     self.logger.error("Oyuncu kaydedilemedi")

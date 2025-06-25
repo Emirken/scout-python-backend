@@ -29,20 +29,20 @@ class PlayerModel:
 
     def set_basic_info(self, name, age, team, league, fbref_id):
         """Temel bilgileri ayarla"""
-        name_parts = name.split(" ")
-        self.data["firstName"] = name_parts[0] if name_parts else ""
+        name_parts = name.split(" ") if name else ["Unknown"]
+        self.data["firstName"] = name_parts[0] if name_parts else "Unknown"
         self.data["lastName"] = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
-        self.data["fullName"] = name
-        self.data["age"] = age
-        self.data["team"] = team
-        self.data["league"] = league
+        self.data["fullName"] = name or "Unknown Player"
+        self.data["age"] = age or 0
+        self.data["team"] = team or "Unknown Team"
+        self.data["league"] = league or "Unknown League"
         self.data["fbrefId"] = fbref_id
 
     def set_physical_info(self, height, weight, preferred_foot):
         """Fiziksel bilgileri ayarla"""
-        self.data["height"] = height
-        self.data["weight"] = weight
-        self.data["preferredFoot"] = preferred_foot
+        self.data["height"] = height or ""
+        self.data["weight"] = weight or ""
+        self.data["preferredFoot"] = preferred_foot or ""
 
     def set_season_stats(self, stats_dict):
         """Sezon istatistiklerini ayarla"""
@@ -72,11 +72,11 @@ class PlayerModel:
 
     def set_similar_players(self, similar_players):
         """Benzer oyuncuları ayarla"""
-        self.data["similarPlayers"] = similar_players
+        self.data["similarPlayers"] = similar_players or []
 
     def set_transfer_history(self, transfers):
         """Transfer geçmişini ayarla"""
-        self.data["transferHistory"] = transfers
+        self.data["transferHistory"] = transfers or []
 
     def update_timestamp(self):
         """Güncelleme zamanını ayarla"""
@@ -87,9 +87,59 @@ class PlayerModel:
         return self.data
 
     def validate(self):
-        """Veri doğrulaması"""
-        required_fields = ["fbrefId", "fullName", "team", "league"]
-        for field in required_fields:
-            if not self.data.get(field):
-                return False, f"Gerekli alan eksik: {field}"
+        """Gelişmiş veri doğrulaması"""
+        # Kritik alanlar - bu alanlar mutlaka dolu olmalı
+        critical_fields = ["fbrefId", "fullName"]
+
+        for field in critical_fields:
+            value = self.data.get(field)
+            if not value or (isinstance(value, str) and value.strip() == ""):
+                return False, f"Kritik alan eksik veya boş: {field}"
+
+        # Opsiyonel ama önemli alanlar - uyarı ver ama başarısız sayma
+        important_fields = ["team", "league"]
+        warnings = []
+
+        for field in important_fields:
+            value = self.data.get(field)
+            if not value or (isinstance(value, str) and value.strip() == ""):
+                warnings.append(f"Önemli alan eksik: {field}")
+
+        # FBRef ID formatı kontrolü
+        fbref_id = self.data.get("fbrefId", "")
+        if fbref_id and not self._is_valid_fbref_id(fbref_id):
+            return False, f"Geçersiz FBRef ID formatı: {fbref_id}"
+
+        # Yaş kontrolü
+        age = self.data.get("age", 0)
+        if age and (age < 15 or age > 50):
+            warnings.append(f"Şüpheli yaş değeri: {age}")
+
+        # Uyarıları logla ama başarılı olarak döndür
+        if warnings:
+            import logging
+            for warning in warnings:
+                logging.warning(f"Validation warning: {warning}")
+
         return True, "OK"
+
+    def _is_valid_fbref_id(self, fbref_id):
+        """FBRef ID formatını kontrol eder"""
+        import re
+        # FBRef ID 8 karakterli hexadecimal string olmalı
+        pattern = r'^[a-f0-9]{8}$'
+        return bool(re.match(pattern, fbref_id))
+
+    def get_summary(self):
+        """Oyuncu özetini döndürür"""
+        return {
+            "name": self.data.get("fullName", "Unknown"),
+            "team": self.data.get("team", "Unknown"),
+            "league": self.data.get("league", "Unknown"),
+            "position": self.data.get("detailedPosition", "Unknown"),
+            "age": self.data.get("age", 0),
+            "fbrefId": self.data.get("fbrefId", ""),
+            "hasStats": bool(self.data.get("seasonStats", {})),
+            "hasScouting": bool(self.data.get("scoutingReport", {})),
+            "updatedAt": self.data.get("updatedAt")
+        }

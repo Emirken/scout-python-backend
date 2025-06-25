@@ -5,3 +5,44 @@
 2025-06-25 14:16:04,248 - ERROR - Oyuncu sayfas� getirilemedi: https://fbref.com/en/players/e342ad68/Mohamed-Salah
 2025-06-25 14:16:04,248 - ERROR - Oyuncu detaylar� �ekilemedi
 2025-06-25 14:16:04,249 - INFO - Kaynaklar temizlendi
+2025-06-25 14:25:01,347 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 14:25:01,348 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:25:01,348 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:25:04,044 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:25:04,047 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 14:25:04,830 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:25:05,030 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:25:05,202 - WDM - INFO - There is no [win64] chromedriver "137.0.7151.119" for browser google-chrome "137.0.7151" in cache
+2025-06-25 14:25:05,203 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:25:05,679 - WDM - INFO - WebDriver version 137.0.7151.119 selected
+2025-06-25 14:25:05,681 - WDM - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip
+2025-06-25 14:25:05,681 - WDM - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip
+2025-06-25 14:25:05,810 - WDM - INFO - Driver downloading response is 200
+2025-06-25 14:25:06,163 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:25:06,452 - WDM - INFO - Driver has been saved in cache [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119]
+2025-06-25 14:25:17,378 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 14:25:24,216 - root - ERROR - Oyuncu verisi geçersiz: Gerekli alan eksik: league
+2025-06-25 14:25:24,217 - __main__ - ERROR - Oyuncu detayları çekilemedi
+2025-06-25 14:25:26,436 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 14:34:21,786 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 14:34:21,786 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:34:21,787 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:34:26,213 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:34:26,219 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 14:34:26,992 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:34:27,170 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:34:27,342 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 14:34:39,649 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 14:34:47,318 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Unknown, Unknown League
+2025-06-25 14:34:50,091 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 14:34:56,570 - root - WARNING - Validation warning: Şüpheli yaş değeri: 400
+2025-06-25 14:34:56,592 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 14:34:56,593 - __main__ - INFO - ==================================================
+2025-06-25 14:34:56,593 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 14:34:56,593 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 14:34:56,593 - __main__ - INFO - Takım: Unknown
+2025-06-25 14:34:56,593 - __main__ - INFO - Lig: Unknown League
+2025-06-25 14:34:56,594 - __main__ - INFO - Pozisyon: fw-mf (am-wm, right)  footed left
+2025-06-25 14:34:56,594 - __main__ - INFO - Yaş: 400
+2025-06-25 14:34:56,594 - __main__ - INFO - ==================================================
+2025-06-25 14:34:58,801 - __main__ - INFO - Kaynaklar temizlendi
