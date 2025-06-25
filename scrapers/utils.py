@@ -18,6 +18,187 @@ class ScrapingUtils:
             return None
 
     @staticmethod
+    def parse_contract_date(date_text):
+        """Gelişmiş kontrat tarihi parsing"""
+        try:
+            if not date_text:
+                return ""
+
+            import re
+            from datetime import datetime
+
+            date_str = str(date_text).strip().lower()
+
+            # Çeşitli tarih formatları
+            date_formats = [
+                # "30 June 2025", "June 30, 2025"
+                r'(\d{1,2})\s+(\w+)\s+(\d{4})',
+                r'(\w+)\s+(\d{1,2}),?\s+(\d{4})',
+
+                # "30/06/2025", "06/30/2025", "2025/06/30"
+                r'(\d{1,2})[/\-](\d{1,2})[/\-](\d{4})',
+                r'(\d{4})[/\-](\d{1,2})[/\-](\d{1,2})',
+
+                # "June 2025", "2025"
+                r'(\w+)\s+(\d{4})',
+                r'^(\d{4})$'
+            ]
+
+            month_names = {
+                'january': '01', 'february': '02', 'march': '03', 'april': '04',
+                'may': '05', 'june': '06', 'july': '07', 'august': '08',
+                'september': '09', 'october': '10', 'november': '11', 'december': '12',
+                'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04',
+                'jun': '06', 'jul': '07', 'aug': '08', 'sep': '09',
+                'oct': '10', 'nov': '11', 'dec': '12'
+            }
+
+            for pattern in date_formats:
+                match = re.search(pattern, date_str)
+                if match:
+                    groups = match.groups()
+
+                    if len(groups) == 1:  # Sadece yıl
+                        year = int(groups[0])
+                        if 2024 <= year <= 2035:
+                            return str(year)
+
+                    elif len(groups) == 2:  # Ay ve yıl
+                        month_text, year_text = groups
+                        try:
+                            year = int(year_text)
+                            if year < 2024 or year > 2035:
+                                continue
+
+                            # Ay ismini kontrol et
+                            if month_text in month_names:
+                                return str(year)
+                            else:
+                                # Sayısal ay olabilir
+                                month = int(month_text)
+                                if 1 <= month <= 12:
+                                    return str(year)
+                        except ValueError:
+                            continue
+
+                    elif len(groups) == 3:  # Tam tarih
+                        try:
+                            # Hangi format olduğunu belirle
+                            if groups[0].isdigit() and groups[2].isdigit():  # Day Month Year
+                                day, month_text, year = groups
+                                year = int(year)
+                                if year < 2024 or year > 2035:
+                                    continue
+                                return str(year)
+                            elif groups[1].isdigit() and groups[2].isdigit():  # Month Day Year
+                                month_text, day, year = groups
+                                year = int(year)
+                                if year < 2024 or year > 2035:
+                                    continue
+                                return str(year)
+                            else:  # Numeric formats
+                                # DD/MM/YYYY or MM/DD/YYYY or YYYY/MM/DD
+                                parts = [int(g) for g in groups if g.isdigit()]
+                                for part in parts:
+                                    if 2024 <= part <= 2035:
+                                        return str(part)
+                        except ValueError:
+                            continue
+
+            return ""
+
+        except Exception as e:
+            logging.error(f"Contract date parsing error: {e}")
+            return ""
+
+    @staticmethod
+    def validate_contract_year(year_text):
+        """Kontrat yılının geçerliliğini kontrol eder"""
+        try:
+            if not year_text:
+                return False
+
+            year = int(str(year_text).strip())
+
+            # Mevcut yıldan en az 10 yıl sonrasına kadar geçerli
+            from datetime import datetime
+            current_year = datetime.now().year
+
+            return current_year <= year <= current_year + 10
+
+        except (ValueError, TypeError):
+            return False
+
+    @staticmethod
+    def extract_contract_keywords(text):
+        """Kontrat ile ilgili anahtar kelimeleri bulur"""
+        try:
+            if not text:
+                return []
+
+            text_lower = str(text).lower()
+
+            contract_keywords = [
+                'contract until', 'contract expires', 'contract ends',
+                'deal until', 'deal expires', 'deal ends',
+                'signed until', 'signed through',
+                'expires in', 'expires on', 'expires at',
+                'until', 'through', 'till'
+            ]
+
+            found_keywords = []
+            for keyword in contract_keywords:
+                if keyword in text_lower:
+                    found_keywords.append(keyword)
+
+            return found_keywords
+
+        except Exception as e:
+            logging.error(f"Contract keyword extraction error: {e}")
+            return []
+
+    @staticmethod
+    def smart_contract_extraction(full_text):
+        """Akıllı kontrat bilgisi çıkarma"""
+        try:
+            if not full_text:
+                return ""
+
+            text = str(full_text).lower()
+
+            # Önce kontrat ile ilgili cümleleri bul
+            sentences = re.split(r'[.!?]+', text)
+            contract_sentences = []
+
+            for sentence in sentences:
+                if any(keyword in sentence for keyword in ['contract', 'deal', 'expires', 'until', 'signed']):
+                    contract_sentences.append(sentence)
+
+            # Her cümlede yıl ara
+            for sentence in contract_sentences:
+                years = re.findall(r'\b(20\d{2})\b', sentence)
+                for year in years:
+                    year_int = int(year)
+                    if ScrapingUtils.validate_contract_year(year_int):
+                        return year
+
+            # Genel arama
+            years = re.findall(r'\b(20\d{2})\b', text)
+            for year in years:
+                year_int = int(year)
+                if ScrapingUtils.validate_contract_year(year_int):
+                    # Bu yılın kontrat yılı olma olasılığını kontrol et
+                    year_context = text[max(0, text.find(year) - 50):text.find(year) + 50]
+                    if any(keyword in year_context for keyword in ['contract', 'deal', 'expires', 'until']):
+                        return year
+
+            return ""
+
+        except Exception as e:
+            logging.error(f"Smart contract extraction error: {e}")
+            return ""
+
+    @staticmethod
     def clean_text(text):
         """Gelişmiş metin temizleme"""
         if not text:

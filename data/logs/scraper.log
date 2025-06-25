@@ -67,3 +67,45 @@
 2025-06-25 14:47:55,495 - __main__ - INFO - Yaş: 33
 2025-06-25 14:47:55,496 - __main__ - INFO - ==================================================
 2025-06-25 14:47:57,712 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 14:59:31,165 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 14:59:31,165 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:59:31,166 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:59:36,005 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 14:59:36,013 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 14:59:36,797 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:59:36,992 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 14:59:37,190 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 14:59:48,720 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 14:59:58,917 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: 2027
+2025-06-25 15:00:02,833 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 15:00:30,045 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 15:00:30,045 - __main__ - INFO - ==================================================
+2025-06-25 15:00:30,046 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 15:00:30,046 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 15:00:30,046 - __main__ - INFO - Takım: Liverpool
+2025-06-25 15:00:30,046 - __main__ - INFO - Lig: Premier League
+2025-06-25 15:00:30,046 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-25 15:00:30,046 - __main__ - INFO - Yaş: 33
+2025-06-25 15:00:30,046 - __main__ - INFO - ==================================================
+2025-06-25 15:00:32,273 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 15:13:43,281 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 15:13:43,282 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 15:13:43,283 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 15:13:47,541 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 15:13:47,549 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 15:13:48,287 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 15:13:48,458 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 15:13:48,649 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 15:14:00,699 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 15:14:07,827 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-25 15:14:11,478 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 15:14:18,441 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 15:14:18,441 - __main__ - INFO - ==================================================
+2025-06-25 15:14:18,441 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 15:14:18,442 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 15:14:18,442 - __main__ - INFO - Takım: Liverpool
+2025-06-25 15:14:18,442 - __main__ - INFO - Lig: Premier League
+2025-06-25 15:14:18,442 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-25 15:14:18,442 - __main__ - INFO - Yaş: 33
+2025-06-25 15:14:18,442 - __main__ - INFO - ==================================================
+2025-06-25 15:14:20,689 - __main__ - INFO - Kaynaklar temizlendi

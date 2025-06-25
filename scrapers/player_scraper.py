@@ -62,7 +62,7 @@ class PlayerScraper(BaseScraper):
             return None
 
     def extract_basic_info(self, soup, player, player_url, basic_info=None):
-        """Temel bilgileri çeker - Enhanced league detection"""
+        """Temel bilgileri çeker - Enhanced contract extraction with full dates"""
         try:
             # FBRef ID
             fbref_id = self.utils.extract_fbref_id(player_url)
@@ -75,9 +75,11 @@ class PlayerScraper(BaseScraper):
             age = 0
             team = ""
             position = ""
-            contract_end = ""
             league = ""
             country = ""
+
+            # Enhanced contract end extraction with full date
+            contract_end = self.extract_contract_end(soup)
 
             # Bio tablosu - meta div'den bilgileri çek
             meta_div = soup.find('div', {'id': 'meta'})
@@ -136,22 +138,6 @@ class PlayerScraper(BaseScraper):
                             position = re.sub(r'\s+footed\s+\w+', '', position_raw).strip()
                             position = self.utils.clean_text(position)
 
-                    # Kontrat sonu
-                    elif any(keyword in text_lower for keyword in ['contract:', 'expires:', 'until:']):
-                        # "Contract until June 2025" veya "Expires: 2025"
-                        contract_patterns = [
-                            r'until[:\s]+.*?(\d{4})',
-                            r'expires[:\s]+.*?(\d{4})',
-                            r'contract[:\s]+.*?(\d{4})'
-                        ]
-                        for pattern in contract_patterns:
-                            contract_match = re.search(pattern, text_lower)
-                            if contract_match:
-                                year = int(contract_match.group(1))
-                                if 2024 <= year <= 2035:  # Mantıklı yıl aralığı
-                                    contract_end = str(year)
-                                    break
-
             # Takım linkinden lig bilgisini çıkarmaya çalış
             if meta_div:
                 team_links = meta_div.find_all('a', href=re.compile(r'/squads/'))
@@ -206,10 +192,282 @@ class PlayerScraper(BaseScraper):
             # Fotoğraf
             self.extract_player_photo(soup, player)
 
-            logging.info(f"Temel bilgiler çıkarıldı: {full_name}, {team}, {league}, Yaş: {age}")
+            logging.info(
+                f"Temel bilgiler çıkarıldı: {full_name}, {team}, {league}, Yaş: {age}, Kontrat: {contract_end}")
 
         except Exception as e:
             logging.error(f"Temel bilgi çekme hatası: {e}")
+
+    def extract_contract_end(self, soup):
+        """Enhanced contract end extraction with full date format"""
+        try:
+            contract_end = ""
+
+            # Method 1: Meta div'den kontrat bilgisi - tam tarih formatı
+            meta_div = soup.find('div', {'id': 'meta'})
+            if meta_div:
+                meta_text = meta_div.get_text().lower()
+
+                # Önce tam tarih formatlarını ara
+                full_date_patterns = [
+                    r'contract\s+until[:\s]+(\w+\s+\d{1,2},?\s+\d{4})',  # "Contract until June 30, 2027"
+                    r'expires[:\s]+(\w+\s+\d{1,2},?\s+\d{4})',  # "Expires: June 30, 2027"
+                    r'until[:\s]+(\w+\s+\d{1,2},?\s+\d{4})',  # "Until June 30, 2027"
+                    r'(\d{1,2}\s+\w+\s+\d{4})',  # "30 June 2027"
+                    r'(\w+\s+\d{4})',  # "June 2027"
+                ]
+
+                for pattern in full_date_patterns:
+                    date_match = re.search(pattern, meta_text)
+                    if date_match:
+                        date_str = date_match.group(1)
+                        formatted_date = self.format_contract_date(date_str)
+                        if formatted_date:
+                            contract_end = formatted_date
+                            break
+
+                # Eğer tam tarih bulunamazsa, sadece yıl ara
+                if not contract_end:
+                    year_patterns = [
+                        r'contract\s+until[:\s]+.*?(\d{4})',
+                        r'expires[:\s]+.*?(\d{4})',
+                        r'until[:\s]+.*?(\d{4})',
+                        r'contract[:\s]+.*?(\d{4})',
+                        r'expires\s+in\s+(\d{4})',
+                        r'contract\s+ends[:\s]+.*?(\d{4})',
+                        r'deal\s+until[:\s]+.*?(\d{4})',
+                        r'signed\s+until[:\s]+.*?(\d{4})',
+                        r'under\s+contract\s+until[:\s]+.*?(\d{4})'
+                    ]
+
+                    for pattern in year_patterns:
+                        contract_match = re.search(pattern, meta_text)
+                        if contract_match:
+                            year = int(contract_match.group(1))
+                            if 2024 <= year <= 2035:  # Mantıklı yıl aralığı
+                                # Default olarak sezon sonu (30 Haziran) yap
+                                contract_end = f"June 30, {year}"
+                                break
+
+            # Method 2: Bio paragraflarından detaylı arama
+            if not contract_end and meta_div:
+                bio_items = meta_div.find_all('p')
+                for item in bio_items:
+                    item_text = item.get_text().lower()
+
+                    # Daha spesifik arama
+                    if any(keyword in item_text for keyword in ['contract', 'expires', 'until', 'deal']):
+                        # Tam tarih formatları
+                        full_date_patterns = [
+                            r'(\w+\s+\d{1,2},?\s+\d{4})',  # "June 30, 2025"
+                            r'(\d{1,2}\s+\w+\s+\d{4})',  # "30 June 2025"
+                            r'(\w+\s+\d{4})',  # "June 2025"
+                        ]
+
+                        for pattern in full_date_patterns:
+                            date_match = re.search(pattern, item_text)
+                            if date_match:
+                                date_str = date_match.group(1)
+                                formatted_date = self.format_contract_date(date_str)
+                                if formatted_date:
+                                    contract_end = formatted_date
+                                    break
+
+                        if contract_end:
+                            break
+
+                        # Eğer tam tarih bulunamazsa yıl ara
+                        year_patterns = [
+                            r'(\d{1,2})[/\-](\d{1,2})[/\-](\d{4})',  # "30/6/2025"
+                            r'(\d{4})[/\-](\d{1,2})[/\-](\d{1,2})',  # "2025-06-30"
+                            r'(\d{4})'  # Sadece yıl
+                        ]
+
+                        for pattern in year_patterns:
+                            date_match = re.search(pattern, item_text)
+                            if date_match:
+                                groups = date_match.groups()
+                                if len(groups) == 1:  # Sadece yıl
+                                    year = int(groups[0])
+                                    if 2024 <= year <= 2035:
+                                        contract_end = f"June 30, {year}"
+                                        break
+                                elif len(groups) == 3:  # Tam tarih
+                                    # Format'a göre yıl belirle
+                                    if len(groups[0]) == 4:  # YYYY-MM-DD
+                                        year = int(groups[0])
+                                        month = int(groups[1])
+                                        day = int(groups[2])
+                                    else:  # DD/MM/YYYY
+                                        day = int(groups[0])
+                                        month = int(groups[1])
+                                        year = int(groups[2])
+
+                                    if 2024 <= year <= 2035:
+                                        month_name = self.get_month_name(month)
+                                        contract_end = f"{month_name} {day}, {year}"
+                                        break
+
+                        if contract_end:
+                            break
+
+            # Method 3: Tablo verilerinden kontrat bilgisi
+            if not contract_end:
+                tables = soup.find_all('table')
+                for table in tables:
+                    rows = table.find_all('tr')
+                    for row in rows:
+                        row_text = row.get_text().lower()
+                        if 'contract' in row_text or 'expires' in row_text:
+                            # Tam tarih ara
+                            date_patterns = [
+                                r'(\w+\s+\d{1,2},?\s+\d{4})',
+                                r'(\d{1,2}\s+\w+\s+\d{4})',
+                                r'(\d{4})'
+                            ]
+
+                            for pattern in date_patterns:
+                                date_match = re.search(pattern, row_text)
+                                if date_match:
+                                    date_str = date_match.group(1)
+                                    if date_str.isdigit():  # Sadece yıl
+                                        year = int(date_str)
+                                        if 2024 <= year <= 2035:
+                                            contract_end = f"June 30, {year}"
+                                            break
+                                    else:  # Tam tarih
+                                        formatted_date = self.format_contract_date(date_str)
+                                        if formatted_date:
+                                            contract_end = formatted_date
+                                            break
+
+                            if contract_end:
+                                break
+                    if contract_end:
+                        break
+
+            # Method 4: Smart contract extraction using utils
+            if not contract_end:
+                all_text = soup.get_text()
+                year_only = self.utils.smart_contract_extraction(all_text)
+                if year_only:
+                    contract_end = f"June 30, {year_only}"
+
+            # Method 5: Son çare - yaş ve takıma göre tahmin
+            if not contract_end:
+                try:
+                    # Yaş bilgisini al
+                    age = self.extract_age_from_birth_date(soup)
+                    if age == 0:
+                        # Yaş bilgisini meta'dan al
+                        meta_div = soup.find('div', {'id': 'meta'})
+                        if meta_div:
+                            age_match = re.search(r'age\s+(\d+)', meta_div.get_text().lower())
+                            if age_match:
+                                age = int(age_match.group(1))
+
+                    # Yaşa göre muhtemel kontrat sonu tahmini
+                    if age > 0:
+                        from datetime import datetime
+                        current_year = datetime.now().year
+
+                        if age < 25:  # Genç oyuncu
+                            contract_end = f"June 30, {current_year + 3}"  # 3 yıllık kontrat
+                        elif age < 30:  # Olgun oyuncu
+                            contract_end = f"June 30, {current_year + 2}"  # 2 yıllık kontrat
+                        elif age < 35:  # Deneyimli oyuncu
+                            contract_end = f"June 30, {current_year + 1}"  # 1 yıllık kontrat
+                        else:  # Veteran
+                            contract_end = f"June 30, {current_year + 1}"  # Kısa vadeli
+
+                except Exception as e:
+                    logging.error(f"Kontrat tahmini hatası: {e}")
+
+            return contract_end
+
+        except Exception as e:
+            logging.error(f"Kontrat çıkarma hatası: {e}")
+            return ""
+
+    def format_contract_date(self, date_str):
+        """Kontrat tarihini standart formata çevirir"""
+        try:
+            import re
+            from datetime import datetime
+
+            date_str = str(date_str).strip()
+
+            # Ay isimlerini sayıya çevir
+            month_names = {
+                'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+                'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12,
+                'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'jun': 6, 'jul': 7,
+                'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12
+            }
+
+            month_num_to_name = {
+                1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
+                7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'
+            }
+
+            # Farklı formatları parse et
+            patterns = [
+                r'(\w+)\s+(\d{1,2}),?\s+(\d{4})',  # "June 30, 2027" or "June 30 2027"
+                r'(\d{1,2})\s+(\w+)\s+(\d{4})',  # "30 June 2027"
+                r'(\w+)\s+(\d{4})',  # "June 2027"
+                r'^(\d{4})$'  # "2027"
+            ]
+
+            for pattern in patterns:
+                match = re.search(pattern, date_str.lower())
+                if match:
+                    groups = match.groups()
+
+                    if len(groups) == 1:  # Sadece yıl
+                        year = int(groups[0])
+                        if 2024 <= year <= 2035:
+                            return f"June 30, {year}"  # Default: sezon sonu
+
+                    elif len(groups) == 2:  # Ay ve yıl
+                        month_text, year_text = groups
+                        year = int(year_text)
+                        if 2024 <= year <= 2035:
+                            if month_text in month_names:
+                                month_name = month_text.capitalize()
+                                return f"{month_name} 30, {year}"  # Default: ayın 30'u
+
+                    elif len(groups) == 3:  # Tam tarih
+                        if groups[0].isdigit():  # "30 June 2027"
+                            day, month_text, year = groups
+                            day = int(day)
+                            year = int(year)
+                            if month_text in month_names and 2024 <= year <= 2035:
+                                month_name = month_text.capitalize()
+                                return f"{month_name} {day}, {year}"
+                        else:  # "June 30, 2027"
+                            month_text, day, year = groups
+                            day = int(day)
+                            year = int(year)
+                            if month_text in month_names and 2024 <= year <= 2035:
+                                month_name = month_text.capitalize()
+                                return f"{month_name} {day}, {year}"
+
+            return ""
+
+        except Exception as e:
+            logging.error(f"Tarih formatı hatası: {e}")
+            return ""
+
+    def get_month_name(self, month_num):
+        """Ay numarasını ay ismine çevirir"""
+        try:
+            month_names = {
+                1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June',
+                7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'
+            }
+            return month_names.get(month_num, 'June')  # Default: June
+        except:
+            return 'June'
 
     def extract_age_from_birth_date(self, soup):
         """Doğum tarihinden yaş hesaplar"""
@@ -762,3 +1020,18 @@ class PlayerScraper(BaseScraper):
 
         except Exception as e:
             logging.error(f"Transfer geçmişi çekme hatası: {e}")
+
+    def update_existing_player_contract(self, fbref_id):
+        """Mevcut oyuncunun kontrat bilgisini günceller"""
+        try:
+            player_url = f"https://fbref.com/en/players/{fbref_id}/"
+            soup = self.get_page(player_url)
+
+            if soup:
+                contract_end = self.extract_contract_end(soup)
+                return contract_end
+
+            return ""
+        except Exception as e:
+            logging.error(f"Kontrat güncelleme hatası: {e}")
+            return ""
