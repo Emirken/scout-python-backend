@@ -892,7 +892,7 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Benzer oyuncular çekme hatası: {e}")
 
     def extract_scouting_report(self, player, player_url):
-        """Scouting raporunu çeker - Tüm istatistikleri tek bir obje içinde toplar"""
+        """Scouting raporunu çeker - Sadece geçerli istatistikleri toplar"""
         try:
             # Scouting report URL'si oluştur
             fbref_id = self.utils.extract_fbref_id(player_url)
@@ -918,20 +918,75 @@ class PlayerScraper(BaseScraper):
 
                 # Çıkarılan istatistikleri ana scouting_data'ya ekle
                 for stat_name, stat_values in table_data.items():
-                    # Eğer aynı isimde istatistik varsa üzerine yazma (veya farklı bir işlem yapabilirsiniz)
-                    if stat_name not in scouting_data:
+                    # Sadece geçerli istatistik isimlerini kabul et
+                    if self.is_valid_stat_name(stat_name):
                         scouting_data[stat_name] = stat_values
 
             # PlayerModel'e scouting verilerini set et
             player.data['scoutingReport'] = scouting_data
 
             if scouting_data:
-                logging.info(f"Scouting raporu tamamlandı: {len(scouting_data)} toplam stat")
+                logging.info(f"Scouting raporu tamamlandı: {len(scouting_data)} geçerli stat")
             else:
                 logging.warning("Hiç scouting verisi çekilemedi")
 
         except Exception as e:
             logging.error(f"Scouting raporu çekme hatası: {e}")
+
+    def is_valid_stat_name(self, stat_name):
+                """İstatistik isminin geçerli olup olmadığını kontrol eder"""
+                try:
+                    if not stat_name or not isinstance(stat_name, str):
+                        return False
+
+                    stat_name_clean = stat_name.strip()
+
+                    # Boş string kontrolü
+                    if not stat_name_clean:
+                        return False
+
+                    # Sadece sayı olanları reddet
+                    if stat_name_clean.isdigit():
+                        return False
+
+                    # Takım isimlerini reddet (büyük harfle başlayan ve birden fazla kelime içeren)
+                    team_indicators = [
+                        'Liverpool', 'Arsenal', 'Manchester', 'Chelsea', 'Barcelona', 'Real Madrid',
+                        'Bayern Munich', 'Paris Saint-Germain', 'Juventus', 'Milan', 'Inter',
+                        'Atletico', 'Napoli', 'Roma', 'Lazio', 'Dortmund', 'Leipzig',
+                        'Marseille', 'Monaco', 'Lyon', 'United', 'City', 'FC', 'Union',
+                        'Whitecaps', 'Pride', 'Wave', 'Spirit', 'Current', 'Cincinnati'
+                    ]
+
+                    # Takım ismi kontrolü
+                    for team_indicator in team_indicators:
+                        if team_indicator.lower() in stat_name_clean.lower():
+                            return False
+
+                    # Geçerli istatistik kelimelerini kontrol et
+                    valid_stat_keywords = [
+                        'goals', 'assists', 'shots', 'passes', 'tackles', 'interceptions',
+                        'blocks', 'clearances', 'touches', 'carries', 'take-ons', 'aerials',
+                        'fouls', 'cards', 'xg', 'xa', 'npxg', 'sca', 'gca', 'progressive',
+                        'completion', 'distance', 'penalty', 'crosses', 'corners', 'through',
+                        'live-ball', 'dead-ball', 'switches', 'final third', 'area',
+                        'challenged', 'won', 'lost', 'attempted', 'successful', 'percentage',
+                        'miscontrols', 'dispossessed', 'recoveries', 'offsides', 'errors'
+                    ]
+
+                    # En az bir geçerli kelime içermeli
+                    stat_lower = stat_name_clean.lower()
+                    has_valid_keyword = any(keyword in stat_lower for keyword in valid_stat_keywords)
+
+                    # Özel durumlar: kısa ama geçerli istatistikler
+                    short_valid_stats = ['%', 'per90', 'percentile']
+                    is_short_valid = any(short_stat in stat_lower for short_stat in short_valid_stats)
+
+                    return has_valid_keyword or is_short_valid
+
+                except Exception as e:
+                    logging.error(f"Stat name validation error: {e}")
+                    return False
 
     def determine_scouting_category(self, table, table_id):
         """Tablodan scouting kategorisini belirler"""
@@ -1122,7 +1177,7 @@ class PlayerScraper(BaseScraper):
             return 'standard'
 
     def parse_scouting_table(self, table):
-        """Scouting tablosunu parse eder - Tüm istatistikleri döndürür"""
+        """Scouting tablosunu parse eder - Gelişmiş filtreleme ile"""
         try:
             scouting_data = {}
 
@@ -1140,12 +1195,18 @@ class PlayerScraper(BaseScraper):
                     stat_name = self.utils.clean_text(stat_cell.get_text())
 
                     # Per 90 değeri
-                    per90_value = self.utils.extract_stat_value(cells[1].get_text())
+                    per90_text = cells[1].get_text().strip()
+                    per90_value = self.utils.extract_stat_value(per90_text)
 
                     # Percentile değeri
-                    percentile_value = self.utils.extract_percentile(cells[2].get_text())
+                    percentile_text = cells[2].get_text().strip()
+                    percentile_value = self.utils.extract_percentile(percentile_text)
 
-                    if stat_name:
+                    # Sadece geçerli veriler için işlem yap
+                    if (stat_name and
+                            self.is_valid_stat_name(stat_name) and
+                            per90_text not in ['', '-', '—'] and
+                            percentile_text not in ['', '-', '—']):
                         scouting_data[stat_name] = {
                             'per90': per90_value,
                             'percentile': percentile_value

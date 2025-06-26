@@ -511,3 +511,47 @@
 2025-06-26 14:23:05,052 - __main__ - INFO - Yaş: 33
 2025-06-26 14:23:05,052 - __main__ - INFO - ==================================================
 2025-06-26 14:23:07,242 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 14:27:25,169 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 14:27:25,169 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:27:25,170 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:27:28,810 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:27:28,813 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 14:27:29,689 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:27:29,883 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:27:30,044 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 14:27:42,069 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 14:27:50,791 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 14:27:53,454 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 14:27:59,576 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 14:27:59,584 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 14:27:59,584 - __main__ - INFO - ==================================================
+2025-06-26 14:27:59,584 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 14:27:59,584 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 14:27:59,584 - __main__ - INFO - Takım: Liverpool
+2025-06-26 14:27:59,584 - __main__ - INFO - Lig: Premier League
+2025-06-26 14:27:59,585 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 14:27:59,585 - __main__ - INFO - Yaş: 33
+2025-06-26 14:27:59,585 - __main__ - INFO - ==================================================
+2025-06-26 14:28:01,837 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 14:29:25,612 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 14:29:25,612 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 14:29:25,613 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 14:29:30,332 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 14:29:30,338 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 14:29:31,115 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:29:31,292 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:29:31,469 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 14:29:46,360 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/18bb7c10/2025-2026/Arsenal-Stats
+2025-06-26 14:29:55,203 - root - INFO - Temel bilgiler çıkarıldı: William Saliba, Arsenal, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-26 14:29:59,664 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/scout/365_m1/William-Saliba-Scouting-Report
+2025-06-26 14:30:05,972 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 14:30:05,991 - __main__ - INFO - Oyuncu başarıyla kaydedildi: William Saliba
+2025-06-26 14:30:05,991 - __main__ - INFO - ==================================================
+2025-06-26 14:30:05,992 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 14:30:05,992 - __main__ - INFO - İsim: William Saliba
+2025-06-26 14:30:05,992 - __main__ - INFO - Takım: Arsenal
+2025-06-26 14:30:05,992 - __main__ - INFO - Lig: Premier League
+2025-06-26 14:30:05,992 - __main__ - INFO - Pozisyon: df (cb
+2025-06-26 14:30:05,992 - __main__ - INFO - Yaş: 24
+2025-06-26 14:30:05,992 - __main__ - INFO - ==================================================
+2025-06-26 14:30:08,227 - __main__ - INFO - Kaynaklar temizlendi
