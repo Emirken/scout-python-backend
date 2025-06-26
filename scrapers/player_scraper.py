@@ -76,7 +76,7 @@ class PlayerScraper(BaseScraper):
             team = ""
             position = ""
             league = ""
-            country = ""
+            country = self.extract_player_country(soup)
 
             # Enhanced contract end extraction with full date
             contract_end = self.extract_contract_end(soup)
@@ -197,6 +197,45 @@ class PlayerScraper(BaseScraper):
 
         except Exception as e:
             logging.error(f"Temel bilgi çekme hatası: {e}")
+
+    def extract_player_country(self, soup):
+        """Oyuncunun ülkesini çeker"""
+        try:
+            # Meta div'ini bul
+            meta_div = soup.find('div', {'id': 'meta'})
+            if not meta_div:
+                return ""
+
+            # Ülke bilgisini ara
+            for p in meta_div.find_all('p'):
+                text = p.get_text().lower()
+                if 'national team:' in text or 'country:' in text:
+                    # Ülke bayrağını bul
+                    flag = p.find('span', class_='f-i')
+                    if flag:
+                        # Bayrak title'ından ülke ismini al
+                        country = flag.get('title', '').strip()
+                        if country:
+                            return country
+
+                    # Bayrak yoksa metinden çıkar
+                    country_match = re.search(r'(national team|country):\s*([^\n]+)', text)
+                    if country_match:
+                        return country_match.group(2).strip().title()
+
+            # Alternatif olarak doğum yerinden ülke çıkar
+            for p in meta_div.find_all('p'):
+                text = p.get_text().lower()
+                if 'born:' in text:
+                    # Örnek: "Born: June 15, 1992 in Nagrig, Egypt"
+                    country_match = re.search(r'in\s+([^,\n]+)$', text)
+                    if country_match:
+                        return country_match.group(1).strip().title()
+
+            return ""
+        except Exception as e:
+            logging.error(f"Ülke bilgisi çekme hatası: {e}")
+            return ""
 
     def extract_contract_end(self, soup):
         """Enhanced contract end extraction with full date format"""
@@ -787,31 +826,84 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Fiziksel bilgi çekme hatası: {e}")
 
     def extract_season_stats(self, soup, player):
-        """Sezon istatistiklerini çeker"""
+        """Tüm sezon istatistiklerini temiz bir şekilde çeker"""
         try:
-            stats_dict = {}
+            season_stats = {}
 
-            # İstatistik tablolarını bul ve parse et
-            table_mappings = {
-                'stats_standard': 'standard',
-                'stats_shooting': 'shooting',
-                'stats_passing': 'passing',
-                'stats_pass_types': 'pass_types',
-                'stats_gca': 'gsc',
-                'stats_defense': 'defense',
-                'stats_possession': 'possession',
-                'stats_misc': 'misc'
-            }
+            # İstenmeyen alanların listesi
+            unwanted_fields = [
+                'statistic', 'per90', 'percentile', 'ranker', 'player',
+                'nationality', 'team', 'compare', 'year_id', 'country',
+                'comp_level', 'lg_finish', 'matches', 'notes'
+            ]
 
-            for table_id, stats_key in table_mappings.items():
-                table = soup.find('table', {'id': table_id})
-                if table:
-                    stats_dict[stats_key] = self.parse_stats_table(table)
+            # Tüm istatistik tablolarını bul
+            tables = soup.find_all('table', class_='stats_table')
 
-            player.set_season_stats(stats_dict)
+            for table in tables:
+                tbody = table.find('tbody')
+                if not tbody:
+                    continue
+
+                # En son sezonun satırını al (son satır)
+                rows = tbody.find_all('tr')
+                if not rows:
+                    continue
+
+                last_row = rows[-1]
+
+                # Tüm hücreleri işle
+                for cell in last_row.find_all(['td', 'th']):
+                    stat_name = cell.get('data-stat', '')
+
+                    # İstenmeyen alanları atla
+                    if not stat_name or stat_name in unwanted_fields:
+                        continue
+
+                    value = self.utils.extract_stat_value(cell.get_text())
+                    if value is not None:
+                        # İstatistik isimlerini daha okunabilir hale getir
+                        clean_name = self.clean_stat_name(stat_name)
+                        season_stats[clean_name] = value
+
+            # Player model'e ekle
+            player.data['seasonStats'] = season_stats
+
+            logging.info(f"Sezon istatistikleri çekildi: {len(season_stats)} istatistik")
 
         except Exception as e:
             logging.error(f"Sezon istatistikleri çekme hatası: {e}")
+
+    def clean_stat_name(self, stat_name):
+        """FBRef stat isimlerini daha temiz hale getirir"""
+        name_mapping = {
+            'goals': 'goals',
+            'assists': 'assists',
+            'games': 'gamesPlayed',
+            'games_starts': 'gamesStarted',
+            'minutes': 'minutesPlayed',
+            'shots_total': 'totalShots',
+            'shots_on_target': 'shotsOnTarget',
+            'passes_completed': 'passesCompleted',
+            'passes_total': 'totalPasses',
+            'passes_pct': 'passAccuracy',
+            'tackles': 'tackles',
+            'interceptions': 'interceptions',
+            'xg': 'expectedGoals',
+            'xa': 'expectedAssists',
+            'npxg': 'nonPenaltyExpectedGoals',
+            'xg_assist': 'expectedAssistedGoals',
+            'cards_yellow': 'yellowCards',
+            'cards_red': 'redCards',
+            'fouls': 'foulsCommitted',
+            'fouled': 'foulsDrawn',
+            'aerials_won': 'aerialsWon',
+            'aerials_lost': 'aerialsLost',
+            'aerials_won_pct': 'aerialDuelSuccessRate',
+            # Diğer stat isimleri...
+        }
+
+        return name_mapping.get(stat_name, stat_name)
 
     def parse_stats_table(self, table):
         """İstatistik tablosunu parse eder"""

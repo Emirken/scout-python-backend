@@ -555,3 +555,247 @@
 2025-06-26 14:30:05,992 - __main__ - INFO - Yaş: 24
 2025-06-26 14:30:05,992 - __main__ - INFO - ==================================================
 2025-06-26 14:30:08,227 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 16:47:40,577 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 16:47:40,577 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 16:47:40,578 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 16:47:42,728 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 16:47:42,732 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 16:47:43,510 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 16:47:43,698 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 16:47:43,872 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 16:47:59,726 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 16:48:06,899 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 16:48:06,908 - root - INFO - Sezon istatistikleri çekildi: 188 istatistik
+2025-06-26 16:48:10,089 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 16:48:18,795 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 16:48:18,804 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 16:48:18,805 - __main__ - INFO - ==================================================
+2025-06-26 16:48:18,805 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 16:48:18,805 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 16:48:18,805 - __main__ - INFO - Takım: Liverpool
+2025-06-26 16:48:18,805 - __main__ - INFO - Lig: Premier League
+2025-06-26 16:48:18,806 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 16:48:18,806 - __main__ - INFO - Yaş: 33
+2025-06-26 16:48:18,806 - __main__ - INFO - ==================================================
+2025-06-26 16:48:21,014 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 16:59:31,039 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 16:59:31,039 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 16:59:31,040 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 16:59:34,992 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 16:59:34,995 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 16:59:35,757 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 16:59:35,932 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 16:59:36,101 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 16:59:47,150 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/18bb7c10/2025-2026/Arsenal-Stats
+2025-06-26 16:59:55,443 - root - INFO - Temel bilgiler çıkarıldı: William Saliba, Arsenal, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-26 16:59:55,451 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 16:59:59,237 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/scout/365_m1/William-Saliba-Scouting-Report
+2025-06-26 17:00:06,374 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:00:06,381 - __main__ - INFO - Oyuncu başarıyla kaydedildi: William Saliba
+2025-06-26 17:00:06,381 - __main__ - INFO - ==================================================
+2025-06-26 17:00:06,381 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:00:06,381 - __main__ - INFO - İsim: William Saliba
+2025-06-26 17:00:06,382 - __main__ - INFO - Takım: Arsenal
+2025-06-26 17:00:06,382 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:00:06,382 - __main__ - INFO - Pozisyon: df (cb
+2025-06-26 17:00:06,382 - __main__ - INFO - Yaş: 24
+2025-06-26 17:00:06,382 - __main__ - INFO - ==================================================
+2025-06-26 17:00:08,657 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:06:33,499 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:06:33,500 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:06:33,500 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:06:37,562 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:06:37,565 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:06:38,356 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:06:38,528 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:06:38,700 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:06:53,444 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 17:06:59,471 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 17:06:59,480 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:07:01,633 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 17:07:10,444 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:07:10,455 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 17:07:10,456 - __main__ - INFO - ==================================================
+2025-06-26 17:07:10,456 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:07:10,456 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 17:07:10,456 - __main__ - INFO - Takım: Liverpool
+2025-06-26 17:07:10,457 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:07:10,457 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 17:07:10,457 - __main__ - INFO - Yaş: 33
+2025-06-26 17:07:10,458 - __main__ - INFO - ==================================================
+2025-06-26 17:07:12,721 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:09:33,309 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:09:33,309 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:09:33,310 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:09:38,315 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:09:38,319 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:09:39,099 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:09:39,288 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:09:39,456 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:09:53,120 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/18bb7c10/2025-2026/Arsenal-Stats
+2025-06-26 17:10:01,470 - root - INFO - Temel bilgiler çıkarıldı: William Saliba, Arsenal, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-26 17:10:01,477 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:10:04,112 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/scout/365_m1/William-Saliba-Scouting-Report
+2025-06-26 17:10:31,399 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:10:31,405 - __main__ - INFO - Oyuncu başarıyla kaydedildi: William Saliba
+2025-06-26 17:10:31,405 - __main__ - INFO - ==================================================
+2025-06-26 17:10:31,405 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:10:31,405 - __main__ - INFO - İsim: William Saliba
+2025-06-26 17:10:31,405 - __main__ - INFO - Takım: Arsenal
+2025-06-26 17:10:31,405 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:10:31,405 - __main__ - INFO - Pozisyon: df (cb
+2025-06-26 17:10:31,406 - __main__ - INFO - Yaş: 24
+2025-06-26 17:10:31,406 - __main__ - INFO - ==================================================
+2025-06-26 17:10:33,613 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:12:50,667 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:12:50,667 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:12:50,668 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:12:53,572 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:12:53,579 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:12:54,442 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:12:54,611 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:12:54,803 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:13:06,234 - root - ERROR - Temel bilgi çekme hatası: 'PlayerScraper' object has no attribute 'extract_contract_end'
+2025-06-26 17:13:06,241 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:13:10,316 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/scout/365_m1/-Scouting-Report
+2025-06-26 17:13:18,792 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:13:18,796 - root - ERROR - Oyuncu verisi geçersiz: Kritik alan eksik veya boş: fbrefId
+2025-06-26 17:13:18,797 - __main__ - ERROR - Oyuncu detayları çekilemedi
+2025-06-26 17:13:20,990 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:15:12,577 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:15:12,577 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:12,578 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:17,511 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:17,518 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:15:18,263 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:15:18,432 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:15:18,613 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:15:25,751 - root - ERROR - Temel bilgi çekme hatası: 'PlayerScraper' object has no attribute 'extract_contract_end'
+2025-06-26 17:15:25,759 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:15:30,000 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/scout/365_m1/-Scouting-Report
+2025-06-26 17:15:38,934 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:15:38,938 - root - ERROR - Oyuncu verisi geçersiz: Kritik alan eksik veya boş: fbrefId
+2025-06-26 17:15:38,938 - __main__ - ERROR - Oyuncu detayları çekilemedi
+2025-06-26 17:15:41,161 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:15:53,774 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:15:53,775 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:53,775 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:56,348 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:15:56,353 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:15:57,116 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:15:57,283 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:15:57,478 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:16:08,855 - root - ERROR - Temel bilgi çekme hatası: 'PlayerScraper' object has no attribute 'extract_contract_end'
+2025-06-26 17:16:08,864 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:16:11,396 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/scout/365_m1/-Scouting-Report
+2025-06-26 17:16:19,954 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:16:19,958 - root - ERROR - Oyuncu verisi geçersiz: Kritik alan eksik veya boş: fbrefId
+2025-06-26 17:16:19,958 - __main__ - ERROR - Oyuncu detayları çekilemedi
+2025-06-26 17:16:22,192 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:17:00,507 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:17:00,508 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:17:00,510 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:17:05,335 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:17:05,341 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:17:06,067 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:17:06,238 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:17:06,433 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:17:15,124 - root - ERROR - Temel bilgi çekme hatası: 'PlayerScraper' object has no attribute 'extract_contract_end'
+2025-06-26 17:17:15,131 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:17:17,247 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/scout/365_m1/-Scouting-Report
+2025-06-26 17:17:24,288 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:17:24,293 - root - ERROR - Oyuncu verisi geçersiz: Kritik alan eksik veya boş: fbrefId
+2025-06-26 17:17:24,294 - __main__ - ERROR - Oyuncu detayları çekilemedi
+2025-06-26 17:17:26,722 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:19:15,217 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:19:15,217 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:19:15,218 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:19:19,771 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/Valentin-Barco
+2025-06-26 17:19:19,775 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:19:20,519 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:19:20,717 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:19:20,906 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:19:33,848 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/c0d3eab4/Strasbourg-Stats
+2025-06-26 17:19:42,073 - root - INFO - Temel bilgiler çıkarıldı: Valentín Barco, Strasbourg, Premier League, Yaş: 20, Kontrat: June 30, 2025
+2025-06-26 17:19:42,080 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:19:45,137 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/b9f282ec/scout/365_m1/Valentín-Barco-Scouting-Report
+2025-06-26 17:20:04,403 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:20:04,409 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Valentín Barco
+2025-06-26 17:20:04,409 - __main__ - INFO - ==================================================
+2025-06-26 17:20:04,409 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:20:04,410 - __main__ - INFO - İsim: Valentín Barco
+2025-06-26 17:20:04,410 - __main__ - INFO - Takım: Strasbourg
+2025-06-26 17:20:04,410 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:20:04,410 - __main__ - INFO - Pozisyon: mf ▪ footed: left
+2025-06-26 17:20:04,410 - __main__ - INFO - Yaş: 20
+2025-06-26 17:20:04,411 - __main__ - INFO - ==================================================
+2025-06-26 17:20:06,631 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:20:36,513 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:20:36,513 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:20:36,514 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:20:41,421 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/William-Saliba
+2025-06-26 17:20:41,429 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:20:42,134 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:20:42,314 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:20:42,508 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:20:54,065 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/18bb7c10/2025-2026/Arsenal-Stats
+2025-06-26 17:21:02,229 - root - INFO - Temel bilgiler çıkarıldı: William Saliba, Arsenal, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-26 17:21:02,237 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:21:04,586 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/972aeb2a/scout/365_m1/William-Saliba-Scouting-Report
+2025-06-26 17:21:12,064 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:21:12,070 - __main__ - INFO - Oyuncu başarıyla kaydedildi: William Saliba
+2025-06-26 17:21:12,070 - __main__ - INFO - ==================================================
+2025-06-26 17:21:12,071 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:21:12,071 - __main__ - INFO - İsim: William Saliba
+2025-06-26 17:21:12,071 - __main__ - INFO - Takım: Arsenal
+2025-06-26 17:21:12,071 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:21:12,071 - __main__ - INFO - Pozisyon: df (cb
+2025-06-26 17:21:12,072 - __main__ - INFO - Yaş: 24
+2025-06-26 17:21:12,072 - __main__ - INFO - ==================================================
+2025-06-26 17:21:14,365 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:21:42,827 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:21:42,828 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:21:42,829 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:21:46,953 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:21:46,956 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:21:47,732 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:21:47,969 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:21:48,171 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:22:02,288 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 17:22:09,126 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 17:22:09,145 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:22:12,818 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 17:22:20,182 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:22:20,194 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 17:22:20,194 - __main__ - INFO - ==================================================
+2025-06-26 17:22:20,194 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:22:20,195 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 17:22:20,195 - __main__ - INFO - Takım: Liverpool
+2025-06-26 17:22:20,195 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:22:20,195 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 17:22:20,196 - __main__ - INFO - Yaş: 33
+2025-06-26 17:22:20,196 - __main__ - INFO - ==================================================
+2025-06-26 17:22:23,480 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 17:25:33,824 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 17:25:33,825 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:25:33,826 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:25:38,699 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 17:25:38,702 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 17:25:39,516 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:25:39,691 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 17:25:39,876 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 17:25:54,845 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 17:26:04,919 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 17:26:04,928 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-26 17:26:08,480 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 17:26:16,163 - root - INFO - Scouting raporu tamamlandı: 105 geçerli stat
+2025-06-26 17:26:16,171 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 17:26:16,171 - __main__ - INFO - ==================================================
+2025-06-26 17:26:16,171 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 17:26:16,171 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 17:26:16,171 - __main__ - INFO - Takım: Liverpool
+2025-06-26 17:26:16,171 - __main__ - INFO - Lig: Premier League
+2025-06-26 17:26:16,172 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 17:26:16,172 - __main__ - INFO - Yaş: 33
+2025-06-26 17:26:16,172 - __main__ - INFO - ==================================================
+2025-06-26 17:26:18,392 - __main__ - INFO - Kaynaklar temizlendi
