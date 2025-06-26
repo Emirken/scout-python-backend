@@ -892,7 +892,7 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Benzer oyuncular çekme hatası: {e}")
 
     def extract_scouting_report(self, player, player_url):
-        """Scouting raporunu çeker - Fixed version"""
+        """Scouting raporunu çeker - Tüm istatistikleri tek bir obje içinde toplar"""
         try:
             # Scouting report URL'si oluştur
             fbref_id = self.utils.extract_fbref_id(player_url)
@@ -907,33 +907,26 @@ class PlayerScraper(BaseScraper):
                 logging.warning(f"Scouting raporu getirilemedi: {scouting_url}")
                 return
 
-            scouting_dict = {}
+            scouting_data = {}
 
-            # Scouting sayfasındaki tüm tabloları bul
-            all_tables = soup.find_all('table')
+            # Tüm tabloları bul
+            tables = soup.find_all('table')
 
-            for table in all_tables:
-                table_id = table.get('id', '')
+            for table in tables:
+                # Her tablodaki istatistikleri çıkar
+                table_data = self.parse_scouting_table(table)
 
-                # Tablo başlığından kategorisini belirle
-                category = self.determine_scouting_category(table, table_id)
+                # Çıkarılan istatistikleri ana scouting_data'ya ekle
+                for stat_name, stat_values in table_data.items():
+                    # Eğer aynı isimde istatistik varsa üzerine yazma (veya farklı bir işlem yapabilirsiniz)
+                    if stat_name not in scouting_data:
+                        scouting_data[stat_name] = stat_values
 
-                if category:
-                    parsed_data = self.parse_scouting_table(table)
-                    if parsed_data:
-                        scouting_dict[category] = parsed_data
-                        logging.info(f"Scouting kategori çekildi: {category} ({len(parsed_data)} stat)")
+            # PlayerModel'e scouting verilerini set et
+            player.data['scoutingReport'] = scouting_data
 
-            # Eğer hiç veri çekilmediyse alternatif yöntem dene
-            if not scouting_dict:
-                logging.warning("Ana yöntemle scouting verisi çekilemedi, alternatif yöntem deneniyor...")
-                scouting_dict = self.extract_scouting_alternative(soup)
-
-            player.set_scouting_report(scouting_dict)
-
-            if scouting_dict:
-                total_stats = sum(len(stats) for stats in scouting_dict.values())
-                logging.info(f"Scouting raporu tamamlandı: {len(scouting_dict)} kategori, {total_stats} toplam stat")
+            if scouting_data:
+                logging.info(f"Scouting raporu tamamlandı: {len(scouting_data)} toplam stat")
             else:
                 logging.warning("Hiç scouting verisi çekilemedi")
 
@@ -1129,7 +1122,7 @@ class PlayerScraper(BaseScraper):
             return 'standard'
 
     def parse_scouting_table(self, table):
-        """Scouting tablosunu parse eder - Fixed version"""
+        """Scouting tablosunu parse eder - Tüm istatistikleri döndürür"""
         try:
             scouting_data = {}
 
@@ -1142,26 +1135,15 @@ class PlayerScraper(BaseScraper):
             for row in rows:
                 cells = row.find_all(['td', 'th'])
                 if len(cells) >= 3:
-                    # İlk hücredeki tam stat ismini al (görünen metin)
+                    # İstatistik ismi
                     stat_cell = cells[0]
                     stat_name = self.utils.clean_text(stat_cell.get_text())
 
-                    # Eğer stat isminde ":" varsa, sadece asıl ismi al
-                    if ':' in stat_name:
-                        # "npxG: Non-Penalty xG" -> "npxG: Non-Penalty xG" olarak kalsın
-                        pass
-                    else:
-                        # Eğer : yoksa, data-stat'tan daha açıklayıcı isim bul
-                        data_stat = stat_cell.get('data-stat', '')
-                        stat_name = self.get_full_stat_name(data_stat, stat_name)
+                    # Per 90 değeri
+                    per90_value = self.utils.extract_stat_value(cells[1].get_text())
 
-                    # Per 90 değeri (ikinci hücre)
-                    per90_cell = cells[1]
-                    per90_value = self.utils.extract_stat_value(per90_cell.get_text())
-
-                    # Percentile değeri (üçüncü hücre)
-                    percentile_cell = cells[2]
-                    percentile_value = self.utils.extract_percentile(percentile_cell.get_text())
+                    # Percentile değeri
+                    percentile_value = self.utils.extract_percentile(cells[2].get_text())
 
                     if stat_name:
                         scouting_data[stat_name] = {
