@@ -109,3 +109,339 @@
 2025-06-25 15:14:18,442 - __main__ - INFO - Yaş: 33
 2025-06-25 15:14:18,442 - __main__ - INFO - ==================================================
 2025-06-25 15:14:20,689 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 16:39:15,996 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 16:39:15,997 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:39:15,998 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:39:18,296 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:39:18,303 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 16:39:19,039 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 16:39:19,267 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 16:39:19,442 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 16:39:58,744 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 16:40:12,555 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-25 16:40:14,964 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 16:40:26,590 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 16:40:26,590 - __main__ - INFO - ==================================================
+2025-06-25 16:40:26,590 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 16:40:26,590 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 16:40:26,591 - __main__ - INFO - Takım: Liverpool
+2025-06-25 16:40:26,591 - __main__ - INFO - Lig: Premier League
+2025-06-25 16:40:26,591 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-25 16:40:26,591 - __main__ - INFO - Yaş: 33
+2025-06-25 16:40:26,592 - __main__ - INFO - ==================================================
+2025-06-25 16:40:28,828 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 16:46:24,054 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 16:46:24,054 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:46:24,055 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:46:26,858 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:46:26,862 - WDM - INFO - ====== WebDriver manager ======
+2025-06-25 16:46:27,593 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 16:46:27,761 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-25 16:46:27,932 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-25 16:46:44,269 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-25 16:47:09,272 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-25 16:47:12,904 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-25 16:47:25,561 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-25 16:47:25,566 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-25 16:47:25,566 - root - INFO - Scouting raporu tamamlandı: 2 kategori, 137 toplam stat
+2025-06-25 16:47:25,573 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-25 16:47:25,574 - __main__ - INFO - ==================================================
+2025-06-25 16:47:25,574 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-25 16:47:25,574 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-25 16:47:25,574 - __main__ - INFO - Takım: Liverpool
+2025-06-25 16:47:25,575 - __main__ - INFO - Lig: Premier League
+2025-06-25 16:47:25,575 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-25 16:47:25,575 - __main__ - INFO - Yaş: 33
+2025-06-25 16:47:25,575 - __main__ - INFO - ==================================================
+2025-06-25 16:47:27,794 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-25 16:49:49,317 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-25 16:49:49,318 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-25 16:49:49,319 - __main__ - INFO - Oyuncu zaten mevcut: Mohamed Salah
+2025-06-25 16:49:49,320 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 09:17:16,978 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 09:17:16,979 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:17:16,979 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:17:20,909 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:17:20,915 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 09:17:21,711 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:17:21,899 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:17:22,093 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:17:22,544 - WDM - INFO - WebDriver version 137.0.7151.119 selected
+2025-06-26 09:17:22,546 - WDM - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip
+2025-06-26 09:17:22,546 - WDM - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/137.0.7151.119/win32/chromedriver-win32.zip
+2025-06-26 09:17:22,666 - WDM - INFO - Driver downloading response is 200
+2025-06-26 09:17:23,039 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:17:23,366 - WDM - INFO - Driver has been saved in cache [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119]
+2025-06-26 09:17:36,203 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 09:18:30,077 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 09:18:33,610 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 09:18:44,347 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 09:18:44,354 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 09:18:44,355 - root - INFO - Scouting verileri kategorilere ayrıldı:
+2025-06-26 09:18:44,355 - root - INFO -   standard: 14 stat
+2025-06-26 09:18:44,355 - root - INFO -   shooting: 17 stat
+2025-06-26 09:18:44,355 - root - INFO -   passing: 18 stat
+2025-06-26 09:18:44,355 - root - INFO -   passTypes: 13 stat
+2025-06-26 09:18:44,356 - root - INFO -   goalShotCreation: 14 stat
+2025-06-26 09:18:44,356 - root - INFO -   defensiveActions: 14 stat
+2025-06-26 09:18:44,357 - root - INFO -   possession: 18 stat
+2025-06-26 09:18:44,357 - root - INFO -   miscellaneous: 10 stat
+2025-06-26 09:18:44,357 - root - INFO - Scouting raporu tamamlandı: 8 kategori, 118 toplam stat
+2025-06-26 09:18:44,366 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 09:18:44,366 - __main__ - INFO - ==================================================
+2025-06-26 09:18:44,366 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 09:18:44,367 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 09:18:44,367 - __main__ - INFO - Takım: Liverpool
+2025-06-26 09:18:44,367 - __main__ - INFO - Lig: Premier League
+2025-06-26 09:18:44,367 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 09:18:44,367 - __main__ - INFO - Yaş: 33
+2025-06-26 09:18:44,367 - __main__ - INFO - ==================================================
+2025-06-26 09:18:46,698 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 09:25:41,155 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 09:25:41,156 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:25:41,156 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:25:45,583 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 09:25:45,589 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 09:25:46,553 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:25:46,754 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 09:25:46,941 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 09:26:00,039 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 09:26:19,307 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 09:26:22,534 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 09:26:28,014 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 09:26:28,020 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 09:26:28,021 - root - INFO - Scouting verileri kategorilere ayrıldı:
+2025-06-26 09:26:28,021 - root - INFO -   standard: 14 stat
+2025-06-26 09:26:28,021 - root - INFO -   shooting: 13 stat
+2025-06-26 09:26:28,021 - root - INFO -   passing: 18 stat
+2025-06-26 09:26:28,021 - root - INFO -   passTypes: 13 stat
+2025-06-26 09:26:28,021 - root - INFO -   goalShotCreation: 14 stat
+2025-06-26 09:26:28,022 - root - INFO -   defensiveActions: 15 stat
+2025-06-26 09:26:28,022 - root - INFO -   possession: 18 stat
+2025-06-26 09:26:28,022 - root - INFO -   miscellaneous: 13 stat
+2025-06-26 09:26:28,022 - root - INFO - Scouting raporu tamamlandı: 8 kategori, 118 toplam stat
+2025-06-26 09:26:28,030 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 09:26:28,030 - __main__ - INFO - ==================================================
+2025-06-26 09:26:28,030 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 09:26:28,030 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 09:26:28,031 - __main__ - INFO - Takım: Liverpool
+2025-06-26 09:26:28,031 - __main__ - INFO - Lig: Premier League
+2025-06-26 09:26:28,031 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 09:26:28,031 - __main__ - INFO - Yaş: 33
+2025-06-26 09:26:28,032 - __main__ - INFO - ==================================================
+2025-06-26 09:26:30,302 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 11:57:36,574 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 11:57:36,574 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 11:57:36,576 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 11:57:41,422 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 11:57:41,430 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 11:57:42,385 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 11:57:42,569 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 11:57:42,776 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 11:57:56,437 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 11:58:02,947 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 11:58:07,182 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 11:58:14,155 - root - INFO - Scouting kategori: standard - 2 stat
+2025-06-26 11:58:14,155 - root - INFO - Scouting kategori: shooting - 18 stat
+2025-06-26 11:58:14,155 - root - INFO - Scouting kategori: passing - 21 stat
+2025-06-26 11:58:14,155 - root - INFO - Scouting kategori: passTypes - 18 stat
+2025-06-26 11:58:14,156 - root - INFO - Scouting kategori: goalShotCreation - 10 stat
+2025-06-26 11:58:14,156 - root - INFO - Scouting kategori: defensiveActions - 15 stat
+2025-06-26 11:58:14,156 - root - INFO - Scouting kategori: possession - 20 stat
+2025-06-26 11:58:14,156 - root - INFO - Scouting kategori: miscellaneous - 13 stat
+2025-06-26 11:58:14,156 - root - INFO - Scouting raporu tamamlandı: 8 kategori, 117 toplam stat
+2025-06-26 11:58:14,165 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 11:58:14,165 - __main__ - INFO - ==================================================
+2025-06-26 11:58:14,166 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 11:58:14,166 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 11:58:14,166 - __main__ - INFO - Takım: Liverpool
+2025-06-26 11:58:14,166 - __main__ - INFO - Lig: Premier League
+2025-06-26 11:58:14,166 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 11:58:14,166 - __main__ - INFO - Yaş: 33
+2025-06-26 11:58:14,167 - __main__ - INFO - ==================================================
+2025-06-26 11:58:16,419 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 12:04:12,139 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 12:04:12,139 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:04:12,140 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:04:15,602 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:04:15,606 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 12:04:16,343 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:04:16,513 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:04:16,689 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 12:04:30,527 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 12:04:40,548 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 12:04:44,253 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 12:04:53,381 - root - INFO - Unified scouting raporu tamamlandı: 160 toplam stat
+2025-06-26 12:04:53,387 - root - INFO - Validation info: Scouting report bulundu: 160 stat
+2025-06-26 12:04:53,407 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 12:04:53,407 - __main__ - INFO - ==================================================
+2025-06-26 12:04:53,408 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 12:04:53,408 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 12:04:53,408 - __main__ - INFO - Takım: Liverpool
+2025-06-26 12:04:53,408 - __main__ - INFO - Lig: Premier League
+2025-06-26 12:04:53,408 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 12:04:53,408 - __main__ - INFO - Yaş: 33
+2025-06-26 12:04:53,409 - __main__ - INFO - ==================================================
+2025-06-26 12:04:55,643 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 12:06:15,077 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 12:06:15,077 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:06:15,078 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:06:19,231 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:06:19,238 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 12:06:20,088 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:06:20,260 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:06:20,432 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 12:06:36,097 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 12:06:45,182 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 12:06:48,421 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 12:06:57,437 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 12:06:57,442 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 12:06:57,443 - root - INFO - Scouting verileri kategorilere ayrıldı:
+2025-06-26 12:06:57,443 - root - INFO -   standard: 14 stat
+2025-06-26 12:06:57,443 - root - INFO -   shooting: 17 stat
+2025-06-26 12:06:57,443 - root - INFO -   passing: 18 stat
+2025-06-26 12:06:57,443 - root - INFO -   passTypes: 13 stat
+2025-06-26 12:06:57,443 - root - INFO -   goalShotCreation: 14 stat
+2025-06-26 12:06:57,444 - root - INFO -   defensiveActions: 14 stat
+2025-06-26 12:06:57,444 - root - INFO -   possession: 18 stat
+2025-06-26 12:06:57,444 - root - INFO -   miscellaneous: 10 stat
+2025-06-26 12:06:57,444 - root - INFO - Scouting raporu tamamlandı: 8 kategori, 118 toplam stat
+2025-06-26 12:06:57,451 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 12:06:57,451 - __main__ - INFO - ==================================================
+2025-06-26 12:06:57,452 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 12:06:57,452 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 12:06:57,452 - __main__ - INFO - Takım: Liverpool
+2025-06-26 12:06:57,452 - __main__ - INFO - Lig: Premier League
+2025-06-26 12:06:57,452 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 12:06:57,452 - __main__ - INFO - Yaş: 33
+2025-06-26 12:06:57,452 - __main__ - INFO - ==================================================
+2025-06-26 12:06:59,685 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 12:07:36,797 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 12:07:36,797 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:07:36,798 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:07:39,812 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:07:39,815 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 12:07:40,707 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:07:40,894 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:07:41,085 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 12:07:51,550 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 12:07:59,318 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 12:08:02,279 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 12:08:11,692 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 12:08:11,697 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 12:08:11,697 - root - INFO - Scouting raporu tamamlandı: 2 kategori, 137 toplam stat
+2025-06-26 12:08:11,704 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 12:08:11,704 - __main__ - INFO - ==================================================
+2025-06-26 12:08:11,705 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 12:08:11,705 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 12:08:11,705 - __main__ - INFO - Takım: Liverpool
+2025-06-26 12:08:11,705 - __main__ - INFO - Lig: Premier League
+2025-06-26 12:08:11,705 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 12:08:11,705 - __main__ - INFO - Yaş: 33
+2025-06-26 12:08:11,706 - __main__ - INFO - ==================================================
+2025-06-26 12:08:13,942 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 12:19:48,005 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 12:19:48,006 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:19:48,007 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:19:52,258 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:19:52,267 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 12:19:53,013 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:19:53,185 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:19:53,348 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 12:20:07,535 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 12:20:15,491 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 12:20:18,373 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 12:20:25,354 - root - WARNING - Stat conflict resolved: Chelsea -> Chelsea_2
+2025-06-26 12:20:25,355 - root - WARNING - Stat conflict resolved: Arsenal -> Arsenal_2
+2025-06-26 12:20:25,355 - root - WARNING - Stat conflict resolved: Manchester City -> Manchester City_2
+2025-06-26 12:20:25,356 - root - WARNING - Stat conflict resolved: Paris Saint-Germain -> Paris Saint-Germain_2
+2025-06-26 12:20:25,357 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: Assists -> shooting_Assists
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: Non-Penalty Goals -> shooting_Non-Penalty Goals
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: npxG: Non-Penalty xG -> shooting_npxG: Non-Penalty xG
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: xAG: Exp. Assisted Goals -> shooting_xAG: Exp. Assisted Goals
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: npxG + xAG -> shooting_npxG + xAG
+2025-06-26 12:20:25,363 - root - WARNING - Stat conflict resolved: Progressive Carries -> shooting_Progressive Carries
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Progressive Passes -> shooting_Progressive Passes
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Progressive Passes Rec -> shooting_Progressive Passes Rec
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Shots Total -> shooting_Shots Total
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Passes Attempted -> shooting_Passes Attempted
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Pass Completion % -> shooting_Pass Completion %
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Shot-Creating Actions -> shooting_Shot-Creating Actions
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Tackles -> shooting_Tackles
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Blocks -> shooting_Blocks
+2025-06-26 12:20:25,364 - root - WARNING - Stat conflict resolved: Interceptions -> shooting_Interceptions
+2025-06-26 12:20:25,365 - root - WARNING - Stat conflict resolved: Clearances -> shooting_Clearances
+2025-06-26 12:20:25,365 - root - WARNING - Stat conflict resolved: Touches (Att Pen) -> shooting_Touches (Att Pen)
+2025-06-26 12:20:25,365 - root - WARNING - Stat conflict resolved: Successful Take-Ons -> shooting_Successful Take-Ons
+2025-06-26 12:20:25,365 - root - WARNING - Stat conflict resolved: Aerials Won -> shooting_Aerials Won
+2025-06-26 12:20:25,365 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 12:20:25,365 - root - INFO - Scouting raporu tamamlandı: 183 toplam stat
+2025-06-26 12:20:25,373 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 12:20:25,373 - __main__ - INFO - ==================================================
+2025-06-26 12:20:25,373 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 12:20:25,373 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 12:20:25,373 - __main__ - INFO - Takım: Liverpool
+2025-06-26 12:20:25,373 - __main__ - INFO - Lig: Premier League
+2025-06-26 12:20:25,373 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 12:20:25,373 - __main__ - INFO - Yaş: 33
+2025-06-26 12:20:25,374 - __main__ - INFO - ==================================================
+2025-06-26 12:20:27,555 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 12:28:05,816 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 12:28:05,816 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:28:05,817 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:28:08,077 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 12:28:08,085 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 12:28:08,854 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:28:09,010 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 12:28:09,180 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 12:28:49,165 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 12:28:55,966 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 12:28:59,310 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 12:29:05,543 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,544 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,544 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,545 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,545 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,546 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,546 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,547 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,548 - root - INFO - Scouting kategori çekildi: general (4 stat)
+2025-06-26 12:29:05,550 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 12:29:05,550 - root - INFO - Scouting kategori çekildi: general (10 stat)
+2025-06-26 12:29:05,555 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 12:29:05,556 - root - INFO - Scouting raporu tamamlandı: 160 toplam stat
+2025-06-26 12:29:05,563 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 12:29:05,563 - __main__ - INFO - ==================================================
+2025-06-26 12:29:05,564 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 12:29:05,564 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 12:29:05,564 - __main__ - INFO - Takım: Liverpool
+2025-06-26 12:29:05,564 - __main__ - INFO - Lig: Premier League
+2025-06-26 12:29:05,564 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 12:29:05,564 - __main__ - INFO - Yaş: 33
+2025-06-26 12:29:05,564 - __main__ - INFO - ==================================================
+2025-06-26 12:29:07,826 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-26 14:02:34,391 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-26 14:02:34,391 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:02:34,392 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:02:38,197 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/Mohamed-Salah
+2025-06-26 14:02:38,206 - WDM - INFO - ====== WebDriver manager ======
+2025-06-26 14:02:40,126 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:02:40,316 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-26 14:02:40,489 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-26 14:02:55,306 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/822bd0ba/2025-2026/Liverpool-Stats
+2025-06-26 14:03:01,647 - root - INFO - Temel bilgiler çıkarıldı: Mohamed Salah, Liverpool, Premier League, Yaş: 33, Kontrat: June 30, 2027
+2025-06-26 14:03:06,096 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/e342ad68/scout/365_m1/Mohamed-Salah-Scouting-Report
+2025-06-26 14:03:12,760 - root - INFO - Scouting kategori çekildi: standard (19 stat)
+2025-06-26 14:03:12,765 - root - INFO - Scouting kategori çekildi: shooting (118 stat)
+2025-06-26 14:03:12,765 - root - INFO - Scouting raporu tamamlandı: 2 kategori, 137 toplam stat
+2025-06-26 14:03:12,773 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Mohamed Salah
+2025-06-26 14:03:12,773 - __main__ - INFO - ==================================================
+2025-06-26 14:03:12,773 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-26 14:03:12,773 - __main__ - INFO - İsim: Mohamed Salah
+2025-06-26 14:03:12,773 - __main__ - INFO - Takım: Liverpool
+2025-06-26 14:03:12,773 - __main__ - INFO - Lig: Premier League
+2025-06-26 14:03:12,773 - __main__ - INFO - Pozisyon: fw-mf (am-wm
+2025-06-26 14:03:12,773 - __main__ - INFO - Yaş: 33
+2025-06-26 14:03:12,774 - __main__ - INFO - ==================================================
+2025-06-26 14:03:14,994 - __main__ - INFO - Kaynaklar temizlendi

@@ -892,7 +892,7 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Benzer oyuncular çekme hatası: {e}")
 
     def extract_scouting_report(self, player, player_url):
-        """Scouting raporunu çeker"""
+        """Scouting raporunu çeker - Fixed version"""
         try:
             # Scouting report URL'si oluştur
             fbref_id = self.utils.extract_fbref_id(player_url)
@@ -909,36 +909,227 @@ class PlayerScraper(BaseScraper):
 
             scouting_dict = {}
 
-            # Scouting tabloları
-            tables = soup.find_all('table', {'class': 'stats_table'})
+            # Scouting sayfasındaki tüm tabloları bul
+            all_tables = soup.find_all('table')
 
-            for table in tables:
+            for table in all_tables:
                 table_id = table.get('id', '')
 
-                if 'scout_summary' in table_id:
-                    scouting_dict['standard'] = self.parse_scouting_table(table)
-                elif 'scout_shooting' in table_id:
-                    scouting_dict['shooting'] = self.parse_scouting_table(table)
-                elif 'scout_passing' in table_id:
-                    scouting_dict['passing'] = self.parse_scouting_table(table)
-                elif 'scout_pass_types' in table_id:
-                    scouting_dict['pass_types'] = self.parse_scouting_table(table)
-                elif 'scout_gca' in table_id:
-                    scouting_dict['gsc'] = self.parse_scouting_table(table)
-                elif 'scout_defense' in table_id:
-                    scouting_dict['defense'] = self.parse_scouting_table(table)
-                elif 'scout_possession' in table_id:
-                    scouting_dict['possession'] = self.parse_scouting_table(table)
-                elif 'scout_misc' in table_id:
-                    scouting_dict['misc'] = self.parse_scouting_table(table)
+                # Tablo başlığından kategorisini belirle
+                category = self.determine_scouting_category(table, table_id)
+
+                if category:
+                    parsed_data = self.parse_scouting_table(table)
+                    if parsed_data:
+                        scouting_dict[category] = parsed_data
+                        logging.info(f"Scouting kategori çekildi: {category} ({len(parsed_data)} stat)")
+
+            # Eğer hiç veri çekilmediyse alternatif yöntem dene
+            if not scouting_dict:
+                logging.warning("Ana yöntemle scouting verisi çekilemedi, alternatif yöntem deneniyor...")
+                scouting_dict = self.extract_scouting_alternative(soup)
 
             player.set_scouting_report(scouting_dict)
+
+            if scouting_dict:
+                total_stats = sum(len(stats) for stats in scouting_dict.values())
+                logging.info(f"Scouting raporu tamamlandı: {len(scouting_dict)} kategori, {total_stats} toplam stat")
+            else:
+                logging.warning("Hiç scouting verisi çekilemedi")
 
         except Exception as e:
             logging.error(f"Scouting raporu çekme hatası: {e}")
 
+    def determine_scouting_category(self, table, table_id):
+        """Tablodan scouting kategorisini belirler"""
+        try:
+            # Önce table ID'sinden çıkarmaya çalış
+            if 'standard' in table_id.lower() or 'summary' in table_id.lower():
+                return 'standard'
+            elif 'shooting' in table_id.lower():
+                return 'shooting'
+            elif 'passing' in table_id.lower() and 'types' not in table_id.lower():
+                return 'passing'
+            elif 'pass_types' in table_id.lower() or 'passtypes' in table_id.lower():
+                return 'pass_types'
+            elif 'gca' in table_id.lower() or 'creation' in table_id.lower():
+                return 'gsc'
+            elif 'defense' in table_id.lower() or 'defensive' in table_id.lower():
+                return 'defense'
+            elif 'possession' in table_id.lower():
+                return 'possession'
+            elif 'misc' in table_id.lower() or 'miscellaneous' in table_id.lower():
+                return 'misc'
+
+            # Table ID'sinden bulamazsa, tablo başlığına bak
+            caption = table.find('caption')
+            if caption:
+                caption_text = caption.get_text().lower()
+
+                if 'standard' in caption_text or 'summary' in caption_text:
+                    return 'standard'
+                elif 'shooting' in caption_text:
+                    return 'shooting'
+                elif 'passing' in caption_text and 'types' not in caption_text:
+                    return 'passing'
+                elif 'pass types' in caption_text:
+                    return 'pass_types'
+                elif 'goal' in caption_text and 'creation' in caption_text:
+                    return 'gsc'
+                elif 'defensive' in caption_text or 'defense' in caption_text:
+                    return 'defense'
+                elif 'possession' in caption_text:
+                    return 'possession'
+                elif 'misc' in caption_text:
+                    return 'misc'
+
+            # Tablonun üstündeki başlığa bak
+            prev_sibling = table.find_previous_sibling()
+            if prev_sibling and prev_sibling.name in ['h2', 'h3', 'h4']:
+                header_text = prev_sibling.get_text().lower()
+
+                if 'shooting' in header_text:
+                    return 'shooting'
+                elif 'passing' in header_text and 'types' not in header_text:
+                    return 'passing'
+                elif 'pass types' in header_text:
+                    return 'pass_types'
+                elif 'goal' in header_text and 'creation' in header_text:
+                    return 'gsc'
+                elif 'defensive' in header_text or 'defense' in header_text:
+                    return 'defense'
+                elif 'possession' in header_text:
+                    return 'possession'
+                elif 'misc' in header_text:
+                    return 'misc'
+
+            # Tablodaki stat isimlerinden kategoriyi tahmin et
+            first_few_stats = []
+            tbody = table.find('tbody')
+            if tbody:
+                rows = tbody.find_all('tr')[:5]  # İlk 5 satıra bak
+                for row in rows:
+                    first_cell = row.find(['td', 'th'])
+                    if first_cell:
+                        stat_name = first_cell.get_text().lower()
+                        first_few_stats.append(stat_name)
+
+            # Stat isimlerinden kategori tahmin et
+            stats_text = ' '.join(first_few_stats)
+
+            if any(word in stats_text for word in ['shots', 'goals', 'shooting']):
+                return 'shooting'
+            elif any(word in stats_text for word in ['passes completed', 'pass completion', 'progressive passes']):
+                return 'passing'
+            elif any(word in stats_text for word in ['live-ball', 'dead-ball', 'through balls', 'crosses']):
+                return 'pass_types'
+            elif any(word in stats_text for word in ['shot-creating', 'goal-creating']):
+                return 'gsc'
+            elif any(word in stats_text for word in ['tackles', 'interceptions', 'blocks']):
+                return 'defense'
+            elif any(word in stats_text for word in ['touches', 'take-ons', 'carries']):
+                return 'possession'
+            elif any(word in stats_text for word in ['yellow cards', 'fouls', 'aerials']):
+                return 'misc'
+
+            return None
+
+        except Exception as e:
+            logging.error(f"Kategori belirleme hatası: {e}")
+            return None
+
+    def extract_scouting_alternative(self, soup):
+        """Alternatif scouting çıkarma yöntemi"""
+        try:
+            scouting_dict = {
+                'standard': {},
+                'shooting': {},
+                'passing': {},
+                'pass_types': {},
+                'gsc': {},
+                'defense': {},
+                'possession': {},
+                'misc': {}
+            }
+
+            # Tüm veri satırlarını bul (percentile sütunu olan)
+            all_rows = soup.find_all('tr')
+
+            for row in all_rows:
+                cells = row.find_all(['td', 'th'])
+                if len(cells) >= 3:
+                    # Üçüncü sütunda percentile var mı kontrol et
+                    third_cell = cells[2].get_text().strip()
+                    if third_cell.isdigit() or '%' in third_cell:
+                        # Bu bir stat satırı
+                        stat_name = self.utils.clean_text(cells[0].get_text())
+                        per90_value = self.utils.extract_stat_value(cells[1].get_text())
+                        percentile_value = self.utils.extract_percentile(third_cell)
+
+                        if stat_name and per90_value is not None:
+                            # Stat'ı uygun kategoriye yerleştir
+                            category = self.categorize_stat_by_name(stat_name)
+
+                            if category:
+                                scouting_dict[category][stat_name] = {
+                                    'per90': per90_value,
+                                    'percentile': percentile_value
+                                }
+
+            # Boş kategorileri temizle
+            scouting_dict = {k: v for k, v in scouting_dict.items() if v}
+
+            return scouting_dict
+
+        except Exception as e:
+            logging.error(f"Alternatif scouting çıkarma hatası: {e}")
+            return {}
+
+    def categorize_stat_by_name(self, stat_name):
+        """Stat isminden kategorisini belirler"""
+        try:
+            stat_lower = stat_name.lower()
+
+            # Shooting stats
+            if any(word in stat_lower for word in ['shots', 'goals', 'xg', 'shooting', 'penalty']):
+                return 'shooting'
+
+            # Passing stats
+            elif any(word in stat_lower for word in
+                     ['passes', 'assists', 'xag', 'key passes', 'final third', 'penalty area']):
+                return 'passing'
+
+            # Pass types
+            elif any(word in stat_lower for word in
+                     ['live-ball', 'dead-ball', 'through balls', 'crosses', 'corner', 'switches']):
+                return 'pass_types'
+
+            # Goal and shot creation
+            elif any(word in stat_lower for word in ['shot-creating', 'goal-creating', 'sca', 'gca']):
+                return 'gsc'
+
+            # Defense
+            elif any(word in stat_lower for word in ['tackles', 'interceptions', 'blocks', 'clearances', 'challenges']):
+                return 'defense'
+
+            # Possession
+            elif any(word in stat_lower for word in
+                     ['touches', 'take-ons', 'carries', 'dribbles', 'progressive carries']):
+                return 'possession'
+
+            # Miscellaneous
+            elif any(word in stat_lower for word in ['cards', 'fouls', 'offsides', 'aerials', 'recoveries']):
+                return 'misc'
+
+            # Default to standard if unclear
+            else:
+                return 'standard'
+
+        except Exception:
+            return 'standard'
+
     def parse_scouting_table(self, table):
-        """Scouting tablosunu parse eder"""
+        """Scouting tablosunu parse eder - Fixed version"""
         try:
             scouting_data = {}
 
@@ -951,14 +1142,26 @@ class PlayerScraper(BaseScraper):
             for row in rows:
                 cells = row.find_all(['td', 'th'])
                 if len(cells) >= 3:
-                    # Stat adı
-                    stat_name = self.utils.clean_text(cells[0].get_text())
+                    # İlk hücredeki tam stat ismini al (görünen metin)
+                    stat_cell = cells[0]
+                    stat_name = self.utils.clean_text(stat_cell.get_text())
 
-                    # Per 90 değeri
-                    per90_value = self.utils.extract_stat_value(cells[1].get_text())
+                    # Eğer stat isminde ":" varsa, sadece asıl ismi al
+                    if ':' in stat_name:
+                        # "npxG: Non-Penalty xG" -> "npxG: Non-Penalty xG" olarak kalsın
+                        pass
+                    else:
+                        # Eğer : yoksa, data-stat'tan daha açıklayıcı isim bul
+                        data_stat = stat_cell.get('data-stat', '')
+                        stat_name = self.get_full_stat_name(data_stat, stat_name)
 
-                    # Percentile değeri
-                    percentile_value = self.utils.extract_percentile(cells[2].get_text())
+                    # Per 90 değeri (ikinci hücre)
+                    per90_cell = cells[1]
+                    per90_value = self.utils.extract_stat_value(per90_cell.get_text())
+
+                    # Percentile değeri (üçüncü hücre)
+                    percentile_cell = cells[2]
+                    percentile_value = self.utils.extract_percentile(percentile_cell.get_text())
 
                     if stat_name:
                         scouting_data[stat_name] = {
@@ -971,6 +1174,170 @@ class PlayerScraper(BaseScraper):
         except Exception as e:
             logging.error(f"Scouting tablo parse hatası: {e}")
             return {}
+
+    def get_full_stat_name(self, data_stat, visible_text):
+        """Data-stat attribute'undan tam stat ismini döndürür"""
+
+        # Scouting report'taki stat isimlerinin mapping'i
+        stat_mappings = {
+            # Standard Stats
+            'goals_per90': 'Goals',
+            'assists_per90': 'Assists',
+            'goals_assists_per90': 'Goals + Assists',
+            'goals_pens_per90': 'Non-Penalty Goals',
+            'pens_made_per90': 'Penalty Kicks Made',
+            'pens_att_per90': 'Penalty Kicks Attempted',
+            'cards_yellow_per90': 'Yellow Cards',
+            'cards_red_per90': 'Red Cards',
+            'xg_per90': 'xG: Expected Goals',
+            'npxg_per90': 'npxG: Non-Penalty xG',
+            'xg_assist_per90': 'xAG: Exp. Assisted Goals',
+            'npxg_xg_assist_per90': 'npxG + xAG',
+            'progressive_carries_per90': 'Progressive Carries',
+            'progressive_passes_per90': 'Progressive Passes',
+            'progressive_passes_received_per90': 'Progressive Passes Rec',
+            'touches_att_pen_area_per90': 'Touches (Att Pen)',
+            'sca_per90': 'Shot-Creating Actions',
+            'passes_per90': 'Passes Attempted',
+            'passes_pct': 'Pass Completion %',
+            'take_ons_won_per90': 'Successful Take-Ons',
+            'tackles_per90': 'Tackles',
+            'interceptions_per90': 'Interceptions',
+            'blocks_per90': 'Blocks',
+            'clearances_per90': 'Clearances',
+            'aerials_won_per90': 'Aerials Won',
+
+            # Shooting Stats
+            'shots_per90': 'Shots Total',
+            'shots_on_target_per90': 'Shots on Target',
+            'shots_on_target_pct': 'Shots on Target %',
+            'goals_per_shot': 'Goals/Shot',
+            'goals_per_shot_on_target': 'Goals/Shot on Target',
+            'average_shot_distance': 'Average Shot Distance',
+            'shots_free_kicks_per90': 'Shots from Free Kicks',
+            'npxg_per_shot': 'npxG/Shot',
+            'goals_minus_xg_per90': 'Goals - xG',
+            'np_goals_minus_npxg_per90': 'Non-Penalty Goals - npxG',
+
+            # Passing Stats
+            'passes_completed_per90': 'Passes Completed',
+            'passes_per90': 'Passes Attempted',
+            'passes_pct': 'Pass Completion %',
+            'passes_total_distance': 'Total Passing Distance',
+            'passes_progressive_distance': 'Progressive Passing Distance',
+            'passes_completed_short_per90': 'Passes Completed (Short)',
+            'passes_short_per90': 'Passes Attempted (Short)',
+            'passes_pct_short': 'Pass Completion % (Short)',
+            'passes_completed_medium_per90': 'Passes Completed (Medium)',
+            'passes_medium_per90': 'Passes Attempted (Medium)',
+            'passes_pct_medium': 'Pass Completion % (Medium)',
+            'passes_completed_long_per90': 'Passes Completed (Long)',
+            'passes_long_per90': 'Passes Attempted (Long)',
+            'passes_pct_long': 'Pass Completion % (Long)',
+            'assists_per90': 'Assists',
+            'xg_assist_per90': 'xAG: Exp. Assisted Goals',
+            'xa_per90': 'xA: Expected Assists',
+            'key_passes_per90': 'Key Passes',
+            'passes_into_final_third_per90': 'Passes into Final Third',
+            'passes_into_penalty_area_per90': 'Passes into Penalty Area',
+            'crosses_into_penalty_area_per90': 'Crosses into Penalty Area',
+            'progressive_passes_per90': 'Progressive Passes',
+
+            # Pass Types
+            'passes_live_per90': 'Live-ball Passes',
+            'passes_dead_per90': 'Dead-ball Passes',
+            'passes_free_kicks_per90': 'Passes from Free Kicks',
+            'through_balls_per90': 'Through Balls',
+            'passes_switches_per90': 'Switches',
+            'crosses_per90': 'Crosses',
+            'throw_ins_per90': 'Throw-ins Taken',
+            'corner_kicks_per90': 'Corner Kicks',
+            'corner_kicks_in_per90': 'Inswinging Corner Kicks',
+            'corner_kicks_out_per90': 'Outswinging Corner Kicks',
+            'corner_kicks_straight_per90': 'Straight Corner Kicks',
+            'passes_completed_per90': 'Passes Completed',
+            'passes_offsides_per90': 'Passes Offside',
+            'passes_blocked_per90': 'Passes Blocked',
+
+            # Goal and Shot Creation
+            'sca_per90': 'Shot-Creating Actions',
+            'sca_passes_live_per90': 'SCA (Live-ball Pass)',
+            'sca_passes_dead_per90': 'SCA (Dead-ball Pass)',
+            'sca_take_ons_per90': 'SCA (Take-On)',
+            'sca_shots_per90': 'SCA (Shot)',
+            'sca_fouled_per90': 'SCA (Fouls Drawn)',
+            'sca_defense_per90': 'SCA (Defensive Action)',
+            'gca_per90': 'Goal-Creating Actions',
+            'gca_passes_live_per90': 'GCA (Live-ball Pass)',
+            'gca_passes_dead_per90': 'GCA (Dead-ball Pass)',
+            'gca_take_ons_per90': 'GCA (Take-On)',
+            'gca_shots_per90': 'GCA (Shot)',
+            'gca_fouled_per90': 'GCA (Fouls Drawn)',
+            'gca_defense_per90': 'GCA (Defensive Action)',
+
+            # Defense
+            'tackles_per90': 'Tackles',
+            'tackles_won_per90': 'Tackles Won',
+            'tackles_def_3rd_per90': 'Tackles (Def 3rd)',
+            'tackles_mid_3rd_per90': 'Tackles (Mid 3rd)',
+            'tackles_att_3rd_per90': 'Tackles (Att 3rd)',
+            'challenge_tackles_per90': 'Dribblers Tackled',
+            'challenges_per90': 'Dribbles Challenged',
+            'challenge_tackles_pct': '% of Dribblers Tackled',
+            'challenges_lost_per90': 'Challenges Lost',
+            'blocks_per90': 'Blocks',
+            'blocked_shots_per90': 'Shots Blocked',
+            'blocked_passes_per90': 'Passes Blocked',
+            'interceptions_per90': 'Interceptions',
+            'tackles_interceptions_per90': 'Tkl+Int',
+            'clearances_per90': 'Clearances',
+            'errors_per90': 'Errors',
+
+            # Possession
+            'touches_per90': 'Touches',
+            'touches_def_pen_area_per90': 'Touches (Def Pen)',
+            'touches_def_3rd_per90': 'Touches (Def 3rd)',
+            'touches_mid_3rd_per90': 'Touches (Mid 3rd)',
+            'touches_att_3rd_per90': 'Touches (Att 3rd)',
+            'touches_att_pen_area_per90': 'Touches (Att Pen)',
+            'touches_live_ball_per90': 'Touches (Live-Ball)',
+            'take_ons_per90': 'Take-Ons Attempted',
+            'take_ons_won_per90': 'Successful Take-Ons',
+            'take_ons_won_pct': 'Successful Take-On %',
+            'take_ons_tackled_per90': 'Times Tackled During Take-On',
+            'take_ons_tackled_pct': 'Tackled During Take-On Percentage',
+            'carries_per90': 'Carries',
+            'carries_distance_per90': 'Total Carrying Distance',
+            'carries_progressive_distance_per90': 'Progressive Carrying Distance',
+            'progressive_carries_per90': 'Progressive Carries',
+            'carries_into_final_third_per90': 'Carries into Final Third',
+            'carries_into_penalty_area_per90': 'Carries into Penalty Area',
+            'miscontrols_per90': 'Miscontrols',
+            'dispossessed_per90': 'Dispossessed',
+            'passes_received_per90': 'Passes Received',
+            'progressive_passes_received_per90': 'Progressive Passes Rec',
+
+            # Miscellaneous
+            'cards_yellow_per90': 'Yellow Cards',
+            'cards_red_per90': 'Red Cards',
+            'cards_yellow_red_per90': 'Second Yellow Card',
+            'fouls_per90': 'Fouls Committed',
+            'fouled_per90': 'Fouls Drawn',
+            'offsides_per90': 'Offsides',
+            'crosses_per90': 'Crosses',
+            'interceptions_per90': 'Interceptions',
+            'tackles_won_per90': 'Tackles Won',
+            'pens_won_per90': 'Penalty Kicks Won',
+            'pens_conceded_per90': 'Penalty Kicks Conceded',
+            'own_goals_per90': 'Own Goals',
+            'ball_recoveries_per90': 'Ball Recoveries',
+            'aerials_won_per90': 'Aerials Won',
+            'aerials_lost_per90': 'Aerials Lost',
+            'aerials_won_pct': '% of Aerials Won'
+        }
+
+        # Eğer mapping'de varsa onu kullan, yoksa görünen metni kullan
+        return stat_mappings.get(data_stat, visible_text)
 
     def extract_transfer_history(self, soup, player):
         """Transfer geçmişini çeker"""
