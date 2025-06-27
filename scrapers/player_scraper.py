@@ -984,9 +984,175 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Benzer oyuncular çekme hatası: {e}")
 
     def extract_scouting_report(self, player, player_url):
-        """Scouting raporunu çeker - Sadece geçerli istatistikleri toplar"""
+        """Scouting raporunu çeker - Tüm pozisyonlar için"""
         try:
             # Scouting report URL'si oluştur
+            fbref_id = self.utils.extract_fbref_id(player_url)
+            if not fbref_id:
+                return
+
+            player_name = player.data.get('fullName', '').replace(' ', '-')
+
+            # Oyuncunun ana pozisyonunu belirle
+            main_position = player.determine_main_position()
+
+            # Mümkün olan tüm pozisyonları kontrol et
+            positions_to_check = self.get_possible_positions(player.data.get('detailedPosition', ''))
+
+            logging.info(f"Scouting report çekiliyor, pozisyonlar: {positions_to_check}")
+
+            for position_key in positions_to_check:
+                try:
+                    scouting_url = self.build_scouting_url(fbref_id, player_name, position_key)
+
+                    soup = self.get_page(scouting_url)
+                    if not soup:
+                        logging.warning(f"Scouting raporu getirilemedi ({position_key}): {scouting_url}")
+                        continue
+
+                    scouting_data = {}
+
+                    # Tüm tabloları bul
+                    tables = soup.find_all('table')
+
+                    for table in tables:
+                        # Her tablodaki istatistikleri çıkar
+                        table_data = self.parse_scouting_table(table)
+
+                        # Çıkarılan istatistikleri ana scouting_data'ya ekle
+                        for stat_name, stat_values in table_data.items():
+                            # Sadece geçerli istatistik isimlerini kabul et
+                            if self.is_valid_stat_name(stat_name):
+                                scouting_data[stat_name] = stat_values
+
+                    if scouting_data:
+                        # Pozisyon ismini düzelt
+                        position_name = self.get_position_display_name(position_key)
+                        player.set_scouting_report_flat(scouting_data, position_name)
+                        logging.info(f"Scouting raporu eklendi ({position_name}): {len(scouting_data)} stat")
+
+                        # İlk başarılı pozisyon için biraz bekle
+                        import time
+                        time.sleep(2)
+
+                except Exception as e:
+                    logging.error(f"Pozisyon {position_key} için scouting hatası: {e}")
+                    continue
+
+            # Eğer hiç scouting verisi çekilememişse, genel sayfayı dene
+            if not player.get_all_scouting_positions():
+                logging.warning("Pozisyon bazlı scouting bulunamadı, genel sayfa deneniyor...")
+                self.extract_general_scouting_report(player, player_url)
+
+        except Exception as e:
+            logging.error(f"Scouting raporu çekme hatası: {e}")
+
+    def get_possible_positions(self, detailed_position):
+        """Oyuncunun mümkün pozisyonlarını belirle"""
+        try:
+            if not detailed_position:
+                return ['vs.All Mid / Wingers']  # Default
+
+            detailed_pos = detailed_position.lower()
+            position_mappings = {
+                # Forward pozisyonları
+                'fw': ['vs.Forwards'],
+                'striker': ['vs.Forwards'],
+                'cf': ['vs.Forwards'],
+                'st': ['vs.Forwards'],
+
+                # Wing pozisyonları
+                'winger': ['vs.All Mid / Wingers'],
+                'lw': ['vs.All Mid / Wingers'],
+                'rw': ['vs.All Mid / Wingers'],
+                'wing': ['vs.All Mid / Wingers'],
+
+                # Midfielder pozisyonları
+                'mf': ['vs.All Mid / Wingers'],
+                'midfielder': ['vs.All Mid / Wingers'],
+                'cm': ['vs.All Mid / Wingers'],
+                'cdm': ['vs.All Mid / Wingers'],
+                'cam': ['vs.All Mid / Wingers'],
+                'dm': ['vs.All Mid / Wingers'],
+                'am': ['vs.All Mid / Wingers'],
+
+                # Defender pozisyonları
+                'df': ['vs.Centre-Backs', 'vs.Fullbacks'],
+                'defender': ['vs.Centre-Backs', 'vs.Fullbacks'],
+                'cb': ['vs.Centre-Backs'],
+                'lb': ['vs.Fullbacks'],
+                'rb': ['vs.Fullbacks'],
+                'wb': ['vs.Fullbacks'],
+                'lwb': ['vs.Fullbacks'],
+                'rwb': ['vs.Fullbacks'],
+
+                # Goalkeeper
+                'gk': ['vs.Goalkeepers'],
+                'goalkeeper': ['vs.Goalkeepers']
+            }
+
+            positions = set()
+
+            # Detaylı pozisyondan pozisyonları çıkar
+            for pos_key, pos_list in position_mappings.items():
+                if pos_key in detailed_pos:
+                    positions.update(pos_list)
+
+            # Eğer hiç eşleşme bulunamazsa
+            if not positions:
+                # "fw-mf" gibi hibrit pozisyonlar için
+                if 'fw' in detailed_pos and 'mf' in detailed_pos:
+                    positions.update(['vs.Forwards', 'vs.All Mid / Wingers'])
+                elif 'mf' in detailed_pos and 'df' in detailed_pos:
+                    positions.update(['vs.All Mid / Wingers', 'vs.Centre-Backs'])
+                else:
+                    positions.add('vs.All Mid / Wingers')  # Default
+
+            return list(positions)
+
+        except Exception as e:
+            logging.error(f"Pozisyon belirleme hatası: {e}")
+            return ['vs.All Mid / Wingers']
+
+    def build_scouting_url(self, fbref_id, player_name, position_key):
+        """Pozisyon bazlı scouting URL'si oluştur"""
+        try:
+            # URL formatı: /en/players/{id}/scout/365_m1/{name}-Scouting-Report
+            # Pozisyon parametresi: ?position={position_key}
+
+            base_url = f"{Settings.FBREF_BASE_URL}/en/players/{fbref_id}/scout/365_m1/{player_name}-Scouting-Report"
+
+            # Pozisyon parametresini encode et
+            import urllib.parse
+            encoded_position = urllib.parse.quote(position_key)
+
+            full_url = f"{base_url}?position={encoded_position}"
+
+            return full_url
+
+        except Exception as e:
+            logging.error(f"Scouting URL oluşturma hatası: {e}")
+            return f"{Settings.FBREF_BASE_URL}/en/players/{fbref_id}/scout/365_m1/{player_name}-Scouting-Report"
+
+    def get_position_display_name(self, position_key):
+        """Position key'den görüntüleme ismi çıkar"""
+        try:
+            display_mappings = {
+                'vs.Forwards': 'Forward',
+                'vs.All Mid / Wingers': 'Midfielder/Winger',
+                'vs.Centre-Backs': 'Centre-Back',
+                'vs.Fullbacks': 'Fullback',
+                'vs.Goalkeepers': 'Goalkeeper'
+            }
+
+            return display_mappings.get(position_key, position_key.replace('vs.', ''))
+
+        except Exception:
+            return position_key
+
+    def extract_general_scouting_report(self, player, player_url):
+        """Genel scouting raporunu çek (pozisyon belirtilmemiş)"""
+        try:
             fbref_id = self.utils.extract_fbref_id(player_url)
             if not fbref_id:
                 return
@@ -996,7 +1162,7 @@ class PlayerScraper(BaseScraper):
 
             soup = self.get_page(scouting_url)
             if not soup:
-                logging.warning(f"Scouting raporu getirilemedi: {scouting_url}")
+                logging.warning(f"Genel scouting raporu getirilemedi: {scouting_url}")
                 return
 
             scouting_data = {}
@@ -1014,71 +1180,69 @@ class PlayerScraper(BaseScraper):
                     if self.is_valid_stat_name(stat_name):
                         scouting_data[stat_name] = stat_values
 
-            # PlayerModel'e scouting verilerini set et
-            player.data['scoutingReport'] = scouting_data
-
             if scouting_data:
-                logging.info(f"Scouting raporu tamamlandı: {len(scouting_data)} geçerli stat")
-            else:
-                logging.warning("Hiç scouting verisi çekilemedi")
+                # Ana pozisyona genel scouting verilerini ekle
+                main_position = player.determine_main_position()
+                player.set_scouting_report_flat(scouting_data, main_position)
+                logging.info(f"Genel scouting raporu eklendi ({main_position}): {len(scouting_data)} stat")
 
         except Exception as e:
-            logging.error(f"Scouting raporu çekme hatası: {e}")
+            logging.error(f"Genel scouting raporu çekme hatası: {e}")
 
     def is_valid_stat_name(self, stat_name):
-                """İstatistik isminin geçerli olup olmadığını kontrol eder"""
-                try:
-                    if not stat_name or not isinstance(stat_name, str):
-                        return False
+        """İstatistik isminin geçerli olup olmadığını kontrol eder"""
+        try:
+            if not stat_name or not isinstance(stat_name, str):
+                return False
 
-                    stat_name_clean = stat_name.strip()
+            stat_name_clean = stat_name.strip()
 
-                    # Boş string kontrolü
-                    if not stat_name_clean:
-                        return False
+            # Boş string kontrolü
+            if not stat_name_clean:
+                return False
 
-                    # Sadece sayı olanları reddet
-                    if stat_name_clean.isdigit():
-                        return False
+            # Sadece sayı olanları reddet
+            if stat_name_clean.isdigit():
+                return False
 
-                    # Takım isimlerini reddet (büyük harfle başlayan ve birden fazla kelime içeren)
-                    team_indicators = [
-                        'Liverpool', 'Arsenal', 'Manchester', 'Chelsea', 'Barcelona', 'Real Madrid',
-                        'Bayern Munich', 'Paris Saint-Germain', 'Juventus', 'Milan', 'Inter',
-                        'Atletico', 'Napoli', 'Roma', 'Lazio', 'Dortmund', 'Leipzig',
-                        'Marseille', 'Monaco', 'Lyon', 'United', 'City', 'FC', 'Union',
-                        'Whitecaps', 'Pride', 'Wave', 'Spirit', 'Current', 'Cincinnati'
-                    ]
+            # Takım isimlerini reddet (büyük harfle başlayan ve birden fazla kelime içeren)
+            team_indicators = [
+                'Liverpool', 'Arsenal', 'Manchester', 'Chelsea', 'Barcelona', 'Real Madrid',
+                'Bayern Munich', 'Paris Saint-Germain', 'Juventus', 'Milan', 'Inter',
+                'Atletico', 'Napoli', 'Roma', 'Lazio', 'Dortmund', 'Leipzig',
+                'Marseille', 'Monaco', 'Lyon', 'United', 'City', 'FC', 'Union',
+                'Whitecaps', 'Pride', 'Wave', 'Spirit', 'Current', 'Cincinnati'
+            ]
 
-                    # Takım ismi kontrolü
-                    for team_indicator in team_indicators:
-                        if team_indicator.lower() in stat_name_clean.lower():
-                            return False
-
-                    # Geçerli istatistik kelimelerini kontrol et
-                    valid_stat_keywords = [
-                        'goals', 'assists', 'shots', 'passes', 'tackles', 'interceptions',
-                        'blocks', 'clearances', 'touches', 'carries', 'take-ons', 'aerials',
-                        'fouls', 'cards', 'xg', 'xa', 'npxg', 'sca', 'gca', 'progressive',
-                        'completion', 'distance', 'penalty', 'crosses', 'corners', 'through',
-                        'live-ball', 'dead-ball', 'switches', 'final third', 'area',
-                        'challenged', 'won', 'lost', 'attempted', 'successful', 'percentage',
-                        'miscontrols', 'dispossessed', 'recoveries', 'offsides', 'errors'
-                    ]
-
-                    # En az bir geçerli kelime içermeli
-                    stat_lower = stat_name_clean.lower()
-                    has_valid_keyword = any(keyword in stat_lower for keyword in valid_stat_keywords)
-
-                    # Özel durumlar: kısa ama geçerli istatistikler
-                    short_valid_stats = ['%', 'per90', 'percentile']
-                    is_short_valid = any(short_stat in stat_lower for short_stat in short_valid_stats)
-
-                    return has_valid_keyword or is_short_valid
-
-                except Exception as e:
-                    logging.error(f"Stat name validation error: {e}")
+            # Takım ismi kontrolü
+            for team_indicator in team_indicators:
+                if team_indicator.lower() in stat_name_clean.lower():
                     return False
+
+            # Geçerli istatistik kelimelerini kontrol et
+            valid_stat_keywords = [
+                'goals', 'assists', 'shots', 'passes', 'tackles', 'interceptions',
+                'blocks', 'clearances', 'touches', 'carries', 'take-ons', 'aerials',
+                'fouls', 'cards', 'xg', 'xa', 'npxg', 'sca', 'gca', 'progressive',
+                'completion', 'distance', 'penalty', 'crosses', 'corners', 'through',
+                'live-ball', 'dead-ball', 'switches', 'final third', 'area',
+                'challenged', 'won', 'lost', 'attempted', 'successful', 'percentage',
+                'miscontrols', 'dispossessed', 'recoveries', 'offsides', 'errors'
+            ]
+
+            # En az bir geçerli kelime içermeli
+            stat_lower = stat_name_clean.lower()
+            has_valid_keyword = any(keyword in stat_lower for keyword in valid_stat_keywords)
+
+            # Özel durumlar: kısa ama geçerli istatistikler
+            short_valid_stats = ['%', 'per90', 'percentile']
+            is_short_valid = any(short_stat in stat_lower for short_stat in short_valid_stats)
+
+            return has_valid_keyword or is_short_valid
+
+        except Exception as e:
+            logging.error(f"Stat name validation error: {e}")
+            return False
 
     def determine_scouting_category(self, table, table_id):
         """Tablodan scouting kategorisini belirler"""

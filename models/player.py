@@ -21,7 +21,12 @@ class PlayerModel:
             "photo": "",
             "similarPlayers": [],
             "seasonStats": {},
-            "scoutingReport": {},
+            # Pozisyona göre scouting report - artık nested object
+            "scoutingReport": {
+                "positions": {},  # Her pozisyon için ayrı data
+                "defaultPosition": "",  # Ana pozisyon
+                "lastUpdated": datetime.utcnow()
+            },
             "transferHistory": [],
             "createdAt": datetime.utcnow(),
             "updatedAt": datetime.utcnow()
@@ -57,9 +62,15 @@ class PlayerModel:
             "miscellaneous": stats_dict.get("misc", {})
         }
 
-    def set_scouting_report(self, scouting_dict):
-        """Scouting raporunu ayarla"""
-        self.data["scoutingReport"] = {
+    def set_scouting_report_for_position(self, position, scouting_dict):
+        """Belirli bir pozisyon için scouting raporunu ayarla"""
+        if not self.data["scoutingReport"]["positions"]:
+            self.data["scoutingReport"]["positions"] = {}
+
+        # Pozisyon isimlerini normalize et
+        normalized_position = self.normalize_position_name(position)
+
+        self.data["scoutingReport"]["positions"][normalized_position] = {
             "standardStats": scouting_dict.get("standard", {}),
             "shooting": scouting_dict.get("shooting", {}),
             "passing": scouting_dict.get("passing", {}),
@@ -67,8 +78,124 @@ class PlayerModel:
             "goalShotCreation": scouting_dict.get("gsc", {}),
             "defensiveActions": scouting_dict.get("defense", {}),
             "possession": scouting_dict.get("possession", {}),
-            "miscellaneous": scouting_dict.get("misc", {})
+            "miscellaneous": scouting_dict.get("misc", {}),
+            "lastUpdated": datetime.utcnow()
         }
+
+        # İlk pozisyon default pozisyon olsun
+        if not self.data["scoutingReport"]["defaultPosition"]:
+            self.data["scoutingReport"]["defaultPosition"] = normalized_position
+
+    def set_scouting_report_flat(self, scouting_dict, position=None):
+        """Düz scouting verisi için - pozisyon belirtilmemişse default pozisyona ata"""
+        if not position:
+            # Oyuncunun ana pozisyonunu kullan
+            position = self.determine_main_position()
+
+        normalized_position = self.normalize_position_name(position)
+
+        if not self.data["scoutingReport"]["positions"]:
+            self.data["scoutingReport"]["positions"] = {}
+
+        self.data["scoutingReport"]["positions"][normalized_position] = scouting_dict
+
+        # Default pozisyon ayarla
+        if not self.data["scoutingReport"]["defaultPosition"]:
+            self.data["scoutingReport"]["defaultPosition"] = normalized_position
+
+        self.data["scoutingReport"]["lastUpdated"] = datetime.utcnow()
+
+    def normalize_position_name(self, position):
+        """Pozisyon isimlerini normalize et"""
+        if not position:
+            return "Unknown"
+
+        pos_lower = str(position).lower().strip()
+
+        # Pozisyon mapping'i
+        position_mappings = {
+            # Attackers/Forwards
+            'fw': 'Forward',
+            'forward': 'Forward',
+            'cf': 'Center Forward',
+            'st': 'Striker',
+            'striker': 'Striker',
+            'lw': 'Left Winger',
+            'rw': 'Right Winger',
+            'winger': 'Winger',
+            'left winger': 'Left Winger',
+            'right winger': 'Right Winger',
+
+            # Midfielders
+            'mf': 'Midfielder',
+            'midfielder': 'Midfielder',
+            'cm': 'Central Midfielder',
+            'cdm': 'Defensive Midfielder',
+            'cam': 'Attacking Midfielder',
+            'dm': 'Defensive Midfielder',
+            'am': 'Attacking Midfielder',
+            'lm': 'Left Midfielder',
+            'rm': 'Right Midfielder',
+
+            # Defenders
+            'df': 'Defender',
+            'defender': 'Defender',
+            'cb': 'Center Back',
+            'lb': 'Left Back',
+            'rb': 'Right Back',
+            'wb': 'Wing Back',
+            'lwb': 'Left Wing Back',
+            'rwb': 'Right Wing Back',
+
+            # Goalkeeper
+            'gk': 'Goalkeeper',
+            'goalkeeper': 'Goalkeeper'
+        }
+
+        # Önce tam eşleşme ara
+        if pos_lower in position_mappings:
+            return position_mappings[pos_lower]
+
+        # Kısmi eşleşme ara
+        for key, value in position_mappings.items():
+            if key in pos_lower:
+                return value
+
+        # Eşleşme bulunamazsa orijinal pozisyonu döndür (capitalize edilmiş)
+        return position.title()
+
+    def determine_main_position(self):
+        """Oyuncunun ana pozisyonunu belirle"""
+        detailed_pos = self.data.get("detailedPosition", "")
+
+        if not detailed_pos:
+            return "Unknown"
+
+        # "fw-mf (am-wm" gibi karmaşık pozisyonlardan ana pozisyonu çıkar
+        # İlk kısmı al (fw-mf'den fw'yi)
+        main_part = detailed_pos.split('(')[0].strip()
+
+        if '-' in main_part:
+            # "fw-mf" gibi birleşik pozisyonlarda ilk kısmı al
+            primary = main_part.split('-')[0].strip()
+        else:
+            primary = main_part
+
+        return self.normalize_position_name(primary)
+
+    def get_scouting_for_position(self, position=None):
+        """Belirli bir pozisyon için scouting raporunu getir"""
+        if not position:
+            position = self.data["scoutingReport"].get("defaultPosition", "")
+
+        normalized_position = self.normalize_position_name(position)
+
+        positions_data = self.data["scoutingReport"].get("positions", {})
+        return positions_data.get(normalized_position, {})
+
+    def get_all_scouting_positions(self):
+        """Mevcut tüm scouting pozisyonlarını getir"""
+        return list(self.data["scoutingReport"].get("positions", {}).keys())
 
     def set_similar_players(self, similar_players):
         """Benzer oyuncuları ayarla"""
@@ -132,6 +259,7 @@ class PlayerModel:
 
     def get_summary(self):
         """Oyuncu özetini döndürür"""
+        positions = self.get_all_scouting_positions()
         return {
             "name": self.data.get("fullName", "Unknown"),
             "team": self.data.get("team", "Unknown"),
@@ -140,6 +268,7 @@ class PlayerModel:
             "age": self.data.get("age", 0),
             "fbrefId": self.data.get("fbrefId", ""),
             "hasStats": bool(self.data.get("seasonStats", {})),
-            "hasScouting": bool(self.data.get("scoutingReport", {})),
+            "scoutingPositions": positions,
+            "defaultScoutingPosition": self.data["scoutingReport"].get("defaultPosition", ""),
             "updatedAt": self.data.get("updatedAt")
         }

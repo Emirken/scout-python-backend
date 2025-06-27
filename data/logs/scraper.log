@@ -799,3 +799,29 @@
 2025-06-26 17:26:16,172 - __main__ - INFO - Yaş: 33
 2025-06-26 17:26:16,172 - __main__ - INFO - ==================================================
 2025-06-26 17:26:18,392 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 12:29:33,841 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 12:29:33,842 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 12:29:33,843 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 12:29:36,612 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 12:29:36,616 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 12:29:37,391 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 12:29:37,564 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 12:29:37,737 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 12:29:52,262 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/53a2f082/2025-2026/Real-Madrid-Stats
+2025-06-27 12:29:59,634 - root - INFO - Temel bilgiler çıkarıldı: Vinicius Júnior, Real Madrid, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-27 12:29:59,643 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 12:29:59,646 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.All Mid / Wingers', 'vs.Forwards']
+2025-06-27 12:30:03,631 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.All%20Mid%20/%20Wingers
+2025-06-27 12:30:09,373 - root - INFO - Scouting raporu eklendi (Midfielder/Winger): 105 stat
+2025-06-27 12:30:15,476 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.Forwards
+2025-06-27 12:30:24,253 - root - INFO - Scouting raporu eklendi (Forward): 105 stat
+2025-06-27 12:30:26,270 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Vinicius Júnior
+2025-06-27 12:30:26,270 - __main__ - INFO - ==================================================
+2025-06-27 12:30:26,271 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 12:30:26,271 - __main__ - INFO - İsim: Vinicius Júnior
+2025-06-27 12:30:26,272 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 12:30:26,272 - __main__ - INFO - Lig: Premier League
+2025-06-27 12:30:26,272 - __main__ - INFO - Pozisyon: fw-mf (am
+2025-06-27 12:30:26,273 - __main__ - INFO - Yaş: 24
+2025-06-27 12:30:26,273 - __main__ - INFO - ==================================================
+2025-06-27 12:30:28,535 - __main__ - INFO - Kaynaklar temizlendi
