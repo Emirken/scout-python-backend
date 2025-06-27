@@ -42,7 +42,8 @@ class Settings:
 
     # Selenium ayarları
     USE_SELENIUM_FALLBACK = os.getenv('USE_SELENIUM_FALLBACK', 'true').lower() == 'true'
-    HEADLESS_BROWSER = os.getenv('HEADLESS_BROWSER', 'true').lower() == 'true'
+    HEADLESS_BROWSER = False  # Debug için görüntülü mod
+    SELENIUM_TIMEOUT = 30
 
     # Proxy settings (optional)
     PROXY_LIST = os.getenv('PROXY_LIST', '').split(',') if os.getenv('PROXY_LIST') else []

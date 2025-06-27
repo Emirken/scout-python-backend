@@ -825,3 +825,155 @@
 2025-06-27 12:30:26,273 - __main__ - INFO - Yaş: 24
 2025-06-27 12:30:26,273 - __main__ - INFO - ==================================================
 2025-06-27 12:30:28,535 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 16:37:01,072 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 16:37:01,072 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:37:01,073 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:37:05,100 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:37:05,108 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 16:37:05,894 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:37:06,082 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:37:06,256 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 16:37:36,146 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/squads/53a2f082/2025-2026/Real-Madrid-Stats
+2025-06-27 16:37:41,754 - root - INFO - Temel bilgiler çıkarıldı: Vinicius Júnior, Real Madrid, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-27 16:37:41,761 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 16:37:41,763 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.Forwards', 'vs.All Mid / Wingers']
+2025-06-27 16:37:41,763 - root - INFO - Pozisyon 'vs.Forwards' için scouting URL: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.Forwards
+2025-06-27 16:37:46,249 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.Forwards
+2025-06-27 16:37:56,493 - root - WARNING - Pozisyon 'vs.Forwards' aktif değil veya sayfa yüklenemedi
+2025-06-27 16:37:59,493 - root - INFO - Pozisyon 'vs.All Mid / Wingers' için scouting URL: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.All%20Mid%20/%20Wingers
+2025-06-27 16:38:03,194 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report?position=vs.All%20Mid%20/%20Wingers
+2025-06-27 16:38:12,999 - root - WARNING - Pozisyon 'vs.All Mid / Wingers' aktif değil veya sayfa yüklenemedi
+2025-06-27 16:38:16,000 - root - WARNING - Pozisyon bazlı scouting bulunamadı, genel sayfa deneniyor...
+2025-06-27 16:38:20,852 - root - WARNING - 403 Forbidden - trying Selenium for: https://fbref.com/en/players/7111d552/scout/365_m1/Vinicius-Júnior-Scouting-Report
+2025-06-27 16:38:30,365 - root - INFO - Genel scouting raporu eklendi (Forward): 105 stat
+2025-06-27 16:38:30,371 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Vinicius Júnior
+2025-06-27 16:38:30,371 - __main__ - INFO - ==================================================
+2025-06-27 16:38:30,371 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 16:38:30,371 - __main__ - INFO - İsim: Vinicius Júnior
+2025-06-27 16:38:30,372 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 16:38:30,372 - __main__ - INFO - Lig: Premier League
+2025-06-27 16:38:30,372 - __main__ - INFO - Pozisyon: fw-mf (am
+2025-06-27 16:38:30,372 - __main__ - INFO - Yaş: 24
+2025-06-27 16:38:30,372 - __main__ - INFO - ==================================================
+2025-06-27 16:38:32,677 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 16:45:01,473 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 16:45:01,473 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:45:01,474 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:45:01,474 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 16:45:02,254 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:45:02,436 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:45:02,601 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 16:45:03,721 - root - INFO - Selenium WebDriver başarıyla kuruldu
+2025-06-27 16:45:23,402 - root - INFO - Temel bilgiler çıkarıldı: Vinicius Júnior, Real Madrid, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-27 16:45:23,409 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 16:45:23,412 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.All Mid / Wingers', 'vs.Forwards']
+2025-06-27 16:45:43,490 - root - INFO - Pozisyon 'vs.All Mid / Wingers' için scouting verisi çekiliyor...
+2025-06-27 16:46:13,791 - root - INFO - Pozisyon butonu 'Att Mid / Wingers' tıklandı
+2025-06-27 16:46:16,921 - root - INFO - Scouting raporu eklendi (Midfielder/Winger): 17 stat
+2025-06-27 16:46:18,921 - root - INFO - Pozisyon 'vs.Forwards' için scouting verisi çekiliyor...
+2025-06-27 16:46:49,147 - root - INFO - Pozisyon butonu 'Forwards' tıklandı
+2025-06-27 16:46:52,277 - root - INFO - Scouting raporu eklendi (Forward): 17 stat
+2025-06-27 16:46:54,286 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Vinicius Júnior
+2025-06-27 16:46:54,286 - __main__ - INFO - ==================================================
+2025-06-27 16:46:54,286 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 16:46:54,286 - __main__ - INFO - İsim: Vinicius Júnior
+2025-06-27 16:46:54,286 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 16:46:54,286 - __main__ - INFO - Lig: Premier League
+2025-06-27 16:46:54,287 - __main__ - INFO - Pozisyon: fw-mf (am
+2025-06-27 16:46:54,287 - __main__ - INFO - Yaş: 24
+2025-06-27 16:46:54,287 - __main__ - INFO - ==================================================
+2025-06-27 16:46:56,529 - root - INFO - Selenium driver kapatıldı
+2025-06-27 16:46:56,531 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 16:48:06,203 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 16:48:06,971 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:48:07,163 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:48:07,349 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 16:48:08,432 - root - INFO - Selenium WebDriver başarıyla kuruldu
+2025-06-27 16:48:08,452 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 16:48:08,452 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:48:08,453 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:48:23,157 - root - INFO - Temel bilgiler çıkarıldı: Vinicius Júnior, Real Madrid, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-27 16:48:23,165 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 16:48:23,168 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.All Mid / Wingers', 'vs.Forwards']
+2025-06-27 16:48:28,986 - root - INFO - Pozisyon 'vs.All Mid / Wingers' için scouting verisi çekiliyor...
+2025-06-27 16:48:59,221 - root - INFO - Pozisyon butonu 'Att Mid / Wingers' tıklandı
+2025-06-27 16:49:02,350 - root - INFO - Scouting raporu eklendi (Midfielder/Winger): 17 stat
+2025-06-27 16:49:04,351 - root - INFO - Pozisyon 'vs.Forwards' için scouting verisi çekiliyor...
+2025-06-27 16:49:34,603 - root - INFO - Pozisyon butonu 'Forwards' tıklandı
+2025-06-27 16:49:37,746 - root - INFO - Scouting raporu eklendi (Forward): 17 stat
+2025-06-27 16:49:39,758 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Vinicius Júnior
+2025-06-27 16:49:39,758 - __main__ - INFO - ==================================================
+2025-06-27 16:49:39,758 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 16:49:39,759 - __main__ - INFO - İsim: Vinicius Júnior
+2025-06-27 16:49:39,759 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 16:49:39,759 - __main__ - INFO - Lig: Premier League
+2025-06-27 16:49:39,760 - __main__ - INFO - Pozisyon: fw-mf (am
+2025-06-27 16:49:39,760 - __main__ - INFO - Yaş: 24
+2025-06-27 16:49:39,760 - __main__ - INFO - ==================================================
+2025-06-27 16:49:41,991 - root - INFO - Selenium driver kapatıldı
+2025-06-27 16:49:41,992 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 16:55:22,196 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 16:55:22,196 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:55:22,197 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/7111d552/Vinicius-Junior
+2025-06-27 16:55:22,197 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 16:55:22,953 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:55:23,156 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 16:55:23,330 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 16:55:24,376 - root - INFO - Selenium WebDriver başarıyla kuruldu
+2025-06-27 16:55:41,832 - root - INFO - Temel bilgiler çıkarıldı: Vinicius Júnior, Real Madrid, Premier League, Yaş: 24, Kontrat: June 30, 2027
+2025-06-27 16:55:41,840 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 16:55:41,841 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.All Mid / Wingers', 'vs.Forwards']
+2025-06-27 16:55:53,062 - root - INFO - Sayfa tam yüklendi
+2025-06-27 16:55:53,062 - root - INFO - Pozisyon 'vs.All Mid / Wingers' için scouting verisi çekiliyor... (1/2)
+2025-06-27 16:56:33,239 - root - INFO - 'vs.All Mid / Wingers' pozisyonu için aranacak buton metinleri: ['Att Mid / Wingers', 'All Mid / Wingers', 'Wingers', 'Mid / Wingers']
+2025-06-27 16:56:44,357 - root - INFO - Pozisyon butonu 'Att Mid / Wingers' tıklandı
+2025-06-27 16:56:55,068 - root - WARNING - Sayfa verisi 10 saniye içinde güncellenmedi
+2025-06-27 16:56:55,068 - root - WARNING - İlk pozisyon 'vs.All Mid / Wingers' bulunamadı, devam ediliyor...
+2025-06-27 16:56:55,068 - root - INFO - Pozisyon 'vs.Forwards' için scouting verisi çekiliyor... (2/2)
+2025-06-27 16:56:55,120 - root - INFO - 'vs.Forwards' pozisyonu için aranacak buton metinleri: ['Forwards']
+2025-06-27 16:57:06,218 - root - INFO - Pozisyon butonu 'Forwards' tıklandı
+2025-06-27 16:57:16,803 - root - WARNING - Sayfa verisi 10 saniye içinde güncellenmedi
+2025-06-27 16:57:16,803 - root - WARNING - Pozisyon 'vs.Forwards' bulunamadı veya geçilemedi
+2025-06-27 16:57:16,804 - root - WARNING - Pozisyon bazlı scouting bulunamadı, genel sayfa deneniyor...
+2025-06-27 16:57:25,102 - root - INFO - Genel scouting raporu eklendi (Forward): 105 stat
+2025-06-27 16:57:25,109 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Vinicius Júnior
+2025-06-27 16:57:25,109 - __main__ - INFO - ==================================================
+2025-06-27 16:57:25,109 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 16:57:25,109 - __main__ - INFO - İsim: Vinicius Júnior
+2025-06-27 16:57:25,109 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 16:57:25,109 - __main__ - INFO - Lig: Premier League
+2025-06-27 16:57:25,110 - __main__ - INFO - Pozisyon: fw-mf (am
+2025-06-27 16:57:25,110 - __main__ - INFO - Yaş: 24
+2025-06-27 16:57:25,110 - __main__ - INFO - ==================================================
+2025-06-27 16:57:27,265 - root - INFO - Selenium driver kapatıldı
+2025-06-27 16:57:27,266 - __main__ - INFO - Kaynaklar temizlendi
+2025-06-27 17:00:56,216 - __main__ - INFO - Veritabanı bağlantısı başarılı
+2025-06-27 17:00:56,217 - __main__ - INFO - Tek oyuncu scraping: https://fbref.com/en/players/3741ca58/Arda-Guler
+2025-06-27 17:00:56,218 - root - INFO - Oyuncu detayları çekiliyor: https://fbref.com/en/players/3741ca58/Arda-Guler
+2025-06-27 17:00:56,219 - WDM - INFO - ====== WebDriver manager ======
+2025-06-27 17:00:57,134 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 17:00:57,313 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-06-27 17:00:57,486 - WDM - INFO - Driver [C:\Users\Emircan ADALI\.wdm\drivers\chromedriver\win64\137.0.7151.119\chromedriver-win32/chromedriver.exe] found in cache
+2025-06-27 17:00:58,548 - root - INFO - Selenium WebDriver başarıyla kuruldu
+2025-06-27 17:01:26,745 - root - INFO - Temel bilgiler çıkarıldı: Arda Güler, Real Madrid, Premier League, Yaş: 20, Kontrat: June 30, 2029
+2025-06-27 17:01:26,752 - root - INFO - Sezon istatistikleri çekildi: 175 istatistik
+2025-06-27 17:01:26,755 - root - INFO - Scouting report çekiliyor, pozisyonlar: ['vs.All Mid / Wingers']
+2025-06-27 17:01:46,012 - root - INFO - Sayfa tam yüklendi
+2025-06-27 17:01:46,013 - root - INFO - Pozisyon 'vs.All Mid / Wingers' için scouting verisi çekiliyor... (1/1)
+2025-06-27 17:02:26,271 - root - INFO - 'vs.All Mid / Wingers' pozisyonu için aranacak buton metinleri: ['Att Mid / Wingers', 'All Mid / Wingers', 'Wingers', 'Mid / Wingers']
+2025-06-27 17:02:37,377 - root - INFO - Pozisyon butonu 'Att Mid / Wingers' tıklandı
+2025-06-27 17:02:48,066 - root - WARNING - Sayfa verisi 10 saniye içinde güncellenmedi
+2025-06-27 17:02:48,066 - root - WARNING - İlk pozisyon 'vs.All Mid / Wingers' bulunamadı, devam ediliyor...
+2025-06-27 17:02:48,066 - root - WARNING - Pozisyon bazlı scouting bulunamadı, genel sayfa deneniyor...
+2025-06-27 17:02:59,305 - root - INFO - Genel scouting raporu eklendi (Midfielder): 105 stat
+2025-06-27 17:02:59,311 - __main__ - INFO - Oyuncu başarıyla kaydedildi: Arda Güler
+2025-06-27 17:02:59,311 - __main__ - INFO - ==================================================
+2025-06-27 17:02:59,311 - __main__ - INFO - OYUNCU SCRAPING TAMAMLANDI
+2025-06-27 17:02:59,311 - __main__ - INFO - İsim: Arda Güler
+2025-06-27 17:02:59,311 - __main__ - INFO - Takım: Real Madrid
+2025-06-27 17:02:59,312 - __main__ - INFO - Lig: Premier League
+2025-06-27 17:02:59,312 - __main__ - INFO - Pozisyon: mf ▪ footed: left
+2025-06-27 17:02:59,312 - __main__ - INFO - Yaş: 20
+2025-06-27 17:02:59,312 - __main__ - INFO - ==================================================
+2025-06-27 17:03:01,519 - root - INFO - Selenium driver kapatıldı
+2025-06-27 17:03:01,520 - __main__ - INFO - Kaynaklar temizlendi
