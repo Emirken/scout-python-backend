@@ -22,7 +22,7 @@ class FBRefScraper:
         # Scraper'ları başlat
         self.league_scraper = LeagueScraper()
         self.player_scraper = PlayerScraper()
-        self.player_scraper.use_selenium = True
+
         # Veritabanını başlat
         try:
             self.db = DatabaseManager()

@@ -6,7 +6,6 @@ from config.settings import Settings
 from config.leagues import LEAGUE_COUNTRIES, LEAGUES
 from models.player import PlayerModel
 import re
-import time
 from urllib.parse import urljoin
 
 
@@ -985,785 +984,9 @@ class PlayerScraper(BaseScraper):
             logging.error(f"Benzer oyuncular çekme hatası: {e}")
 
     def extract_scouting_report(self, player, player_url):
-        """Scouting raporunu çeker - Sayfa değişikliği kontrolü ile"""
+        """Scouting raporunu çeker - Sadece geçerli istatistikleri toplar"""
         try:
             # Scouting report URL'si oluştur
-            fbref_id = self.utils.extract_fbref_id(player_url)
-            if not fbref_id:
-                return
-
-            player_name = player.data.get('fullName', '').replace(' ', '-')
-
-            # Tek scouting URL'si - butonlar dinamik
-            scouting_url = f"{Settings.FBREF_BASE_URL}/en/players/{fbref_id}/scout/365_m1/{player_name}-Scouting-Report"
-
-            # Mümkün olan tüm pozisyonları kontrol et
-            positions_to_check = self.get_possible_positions(player.data.get('detailedPosition', ''))
-
-            logging.info(f"Scouting report çekiliyor, pozisyonlar: {positions_to_check}")
-
-            # Selenium driver setup (eğer yoksa)
-            if not self.driver:
-                self.setup_selenium()
-                if not self.driver:
-                    logging.error("Selenium driver kurulamadı")
-                    return
-
-            # Ana sayfayı yükle
-            self.driver.get(scouting_url)
-
-            # Sayfa tam yüklenene kadar bekle
-            self.wait_for_page_load()
-
-            # Her pozisyon için scouting çek
-            for i, position_key in enumerate(positions_to_check):
-                try:
-                    logging.info(
-                        f"Pozisyon '{position_key}' için scouting verisi çekiliyor... ({i + 1}/{len(positions_to_check)})")
-
-                    # İlk pozisyon için buton tıklamaya gerek yok (varsayılan olarak yüklü)
-                    if i == 0:
-                        # İlk pozisyonun aktif olduğunu doğrula
-                        if not self.verify_current_position(position_key):
-                            # Eğer farklı pozisyon aktifse, istenen pozisyona geç
-                            if not self.switch_to_position(position_key):
-                                logging.warning(f"İlk pozisyon '{position_key}' bulunamadı, devam ediliyor...")
-                                continue
-                    else:
-                        # Diğer pozisyonlar için buton tıkla
-                        if not self.switch_to_position(position_key):
-                            logging.warning(f"Pozisyon '{position_key}' bulunamadı veya geçilemedi")
-                            continue
-
-                    # Veri değişimini bekle ve doğrula
-                    if not self.wait_for_data_change(position_key):
-                        logging.warning(f"Pozisyon '{position_key}' için veri güncellemesi algılanamadı")
-                        continue
-
-                    # Bu pozisyona özel scouting verilerini çıkar
-                    position_scouting_data = self.extract_current_scouting_data()
-
-                    if position_scouting_data:
-                        # Pozisyon ismini düzelt
-                        position_name = self.get_position_display_name(position_key)
-                        player.set_scouting_report_flat(position_scouting_data, position_name)
-                        logging.info(f"Scouting raporu eklendi ({position_name}): {len(position_scouting_data)} stat")
-
-                        # Debug: İlk birkaç percentile'ı logla
-                        self.log_sample_percentiles(position_scouting_data, position_name)
-                    else:
-                        logging.warning(f"Pozisyon {position_key} için veri çıkarılamadı")
-
-                    # Pozisyonlar arası bekleme
-                    import time
-                    time.sleep(2)
-
-                except Exception as e:
-                    logging.error(f"Pozisyon {position_key} için scouting hatası: {e}")
-                    continue
-
-            # Eğer hiç scouting verisi çekilememişse, genel sayfayı dene
-            if not player.get_all_scouting_positions():
-                logging.warning("Pozisyon bazlı scouting bulunamadı, genel sayfa deneniyor...")
-                self.extract_general_scouting_report(player, player_url)
-
-        except Exception as e:
-            logging.error(f"Scouting raporu çekme hatası: {e}")
-
-    def wait_for_page_load(self):
-        """Sayfa tam yüklenene kadar bekler"""
-        try:
-            from selenium.webdriver.support.ui import WebDriverWait
-            from selenium.webdriver.support import expected_conditions as EC
-            from selenium.webdriver.common.by import By
-
-            # Standard Stats tablosunun yüklenmesini bekle
-            WebDriverWait(self.driver, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "stats_table"))
-            )
-
-            # JavaScript'lerin yüklenmesini bekle
-            WebDriverWait(self.driver, 10).until(
-                lambda driver: driver.execute_script("return jQuery.active == 0") if self.driver.execute_script(
-                    "return typeof jQuery != 'undefined'") else True
-            )
-
-            import time
-            time.sleep(3)  # Ek güvenlik
-
-            logging.info("Sayfa tam yüklendi")
-
-        except Exception as e:
-            logging.warning(f"Sayfa yükleme bekleme hatası: {e}")
-
-    def verify_current_position(self, expected_position_key):
-        """Şu anki aktif pozisyonu doğrular"""
-        try:
-            from selenium.webdriver.common.by import By
-
-            # Aktif buton selectorları
-            active_selectors = [
-                "//button[contains(@class, 'selected')]",
-                "//button[contains(@class, 'active')]",
-                "//a[contains(@class, 'selected')]",
-                "//a[contains(@class, 'active')]"
-            ]
-
-            for selector in active_selectors:
-                try:
-                    elements = self.driver.find_elements(By.XPATH, selector)
-                    for element in elements:
-                        button_text = element.text.strip()
-                        if self.position_matches(button_text, expected_position_key):
-                            logging.info(f"Pozisyon '{expected_position_key}' zaten aktif")
-                            return True
-                except:
-                    continue
-
-            # Sayfa title'dan kontrol et
-            title = self.driver.title
-            position_text = expected_position_key.replace('vs.', '').strip()
-            if position_text.lower() in title.lower():
-                logging.info(f"Pozisyon '{expected_position_key}' title'da mevcut")
-                return True
-
-            return False
-
-        except Exception as e:
-            logging.error(f"Pozisyon doğrulama hatası: {e}")
-            return False
-
-    def switch_to_position(self, position_key):
-        """Belirtilen pozisyona geçer ve başarıyı doğrular"""
-        try:
-            from selenium.webdriver.common.by import By
-            from selenium.webdriver.support.ui import WebDriverWait
-            from selenium.webdriver.support import expected_conditions as EC
-            from selenium.common.exceptions import TimeoutException, NoSuchElementException
-            import time
-
-            # Mevcut sayfanın hash'ini al (değişiklik tespiti için)
-            initial_hash = self.get_page_data_hash()
-
-            # Pozisyon buton mapping'i
-            button_mappings = {
-                'vs.All Mid / Wingers': ['Att Mid / Wingers', 'All Mid / Wingers', 'Wingers', 'Mid / Wingers'],
-                'vs.Forwards': ['Forwards'],
-                'vs.Centre-Backs': ['Centre-Backs', 'Center-Backs'],
-                'vs.Fullbacks': ['Fullbacks'],
-                'vs.Goalkeepers': ['Goalkeepers']
-            }
-
-            button_texts = button_mappings.get(position_key, [position_key.replace('vs.', '')])
-
-            logging.info(f"'{position_key}' pozisyonu için aranacak buton metinleri: {button_texts}")
-
-            # Farklı selector'ları dene
-            selectors = [
-                "//button[contains(text(), '{}') and not(contains(@class, 'selected') or contains(@class, 'active'))]",
-                "//a[contains(text(), '{}') and not(contains(@class, 'selected') or contains(@class, 'active'))]",
-                "//button[contains(text(), '{}')]",
-                "//a[contains(text(), '{}')]",
-                "//*[contains(@class, 'tooltip') and contains(text(), '{}')]",
-                "//*[contains(text(), '{}')]"
-            ]
-
-            button_clicked = False
-
-            for button_text in button_texts:
-                if button_clicked:
-                    break
-
-                for selector_template in selectors:
-                    try:
-                        selector = selector_template.format(button_text)
-
-                        elements = self.driver.find_elements(By.XPATH, selector)
-
-                        for element in elements:
-                            try:
-                                # Element görünür ve tıklanabilir mi?
-                                if element.is_displayed() and element.is_enabled():
-
-                                    # Eğer element zaten aktifse atla
-                                    classes = element.get_attribute('class') or ''
-                                    if 'selected' in classes or 'active' in classes:
-                                        logging.info(f"Pozisyon '{button_text}' zaten aktif")
-                                        return True
-
-                                    # JavaScript ile tıkla
-                                    self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-                                    time.sleep(1)
-                                    self.driver.execute_script("arguments[0].click();", element)
-
-                                    logging.info(f"Pozisyon butonu '{button_text}' tıklandı")
-                                    button_clicked = True
-                                    break
-
-                            except Exception as e:
-                                logging.debug(f"Element tıklama hatası: {e}")
-                                continue
-
-                        if button_clicked:
-                            break
-
-                    except Exception as e:
-                        logging.debug(f"Selector hatası ({selector}): {e}")
-                        continue
-
-            if not button_clicked:
-                logging.warning(f"Hiçbir buton tıklanamadı: {position_key}")
-                return False
-
-            # Veri değişimini bekle
-            max_wait = 10
-            for i in range(max_wait):
-                time.sleep(1)
-                new_hash = self.get_page_data_hash()
-                if new_hash != initial_hash:
-                    logging.info(f"Sayfa verisi güncellendi (deneme {i + 1})")
-                    time.sleep(2)  # Ek stabilite
-                    return True
-
-            logging.warning(f"Sayfa verisi {max_wait} saniye içinde güncellenmedi")
-            return False
-
-        except Exception as e:
-            logging.error(f"Pozisyon değiştirme hatası ({position_key}): {e}")
-            return False
-
-    def get_page_data_hash(self):
-        """Sayfadaki percentile verilerinin hash'ini döndürür"""
-        try:
-            from selenium.webdriver.common.by import By
-            import hashlib
-
-            # Percentile değerlerini topla
-            percentile_elements = self.driver.find_elements(By.XPATH, "//td[3]")  # 3. sütun percentile
-            percentile_texts = [elem.text.strip() for elem in percentile_elements[:10]]  # İlk 10 değer
-
-            # Hash oluştur
-            hash_input = ''.join(percentile_texts)
-            return hashlib.md5(hash_input.encode()).hexdigest()
-
-        except Exception as e:
-            logging.debug(f"Hash oluşturma hatası: {e}")
-            return str(time.time())  # Fallback
-
-    def wait_for_data_change(self, position_key, timeout=15):
-        """Veri değişimini bekler ve doğrular"""
-        try:
-            import time
-            from selenium.webdriver.common.by import By
-
-            # Percentile verilerinin stabilize olmasını bekle
-            stable_count = 0
-            last_hash = None
-
-            for i in range(timeout):
-                current_hash = self.get_page_data_hash()
-
-                if current_hash == last_hash:
-                    stable_count += 1
-                    if stable_count >= 3:  # 3 saniye stabil
-                        logging.info(f"Veri stabilize oldu: {position_key}")
-                        return True
-                else:
-                    stable_count = 0
-                    last_hash = current_hash
-
-                time.sleep(1)
-
-            logging.warning(f"Veri stabilize olmadı: {position_key}")
-            return True  # Yine de devam et
-
-        except Exception as e:
-            logging.error(f"Veri değişim bekleme hatası: {e}")
-            return True
-
-    def position_matches(self, button_text, position_key):
-        """Buton metni ile pozisyon key'i eşleşiyor mu kontrol eder"""
-        try:
-            button_lower = button_text.lower().strip()
-            position_lower = position_key.lower().replace('vs.', '').strip()
-
-            # Doğrudan eşleşme
-            if position_lower in button_lower or button_lower in position_lower:
-                return True
-
-            # Özel eşleşmeler
-            mappings = {
-                'att mid / wingers': ['all mid', 'wingers', 'mid / wingers'],
-                'forwards': ['forwards'],
-                'centre-backs': ['centre-backs', 'center-backs'],
-                'fullbacks': ['fullbacks'],
-                'goalkeepers': ['goalkeepers']
-            }
-
-            for key, values in mappings.items():
-                if key in position_lower:
-                    return any(val in button_lower for val in values)
-
-            return False
-
-        except Exception:
-            return False
-
-    def log_sample_percentiles(self, scouting_data, position_name):
-        """Debug için örnek percentile değerlerini logla"""
-        try:
-            sample_stats = ['Non-Penalty Goals', 'Assists', 'Progressive Carries']
-            percentiles = []
-
-            for stat in sample_stats:
-                if stat in scouting_data:
-                    percentile = scouting_data[stat].get('percentile', 'N/A')
-                    percentiles.append(f"{stat}: {percentile}")
-
-            if percentiles:
-                logging.info(f"[{position_name}] Örnek percentile'lar: {', '.join(percentiles)}")
-
-        except Exception as e:
-            logging.debug(f"Percentile loglama hatası: {e}")
-
-    def click_position_button(self, position_key):
-        """Belirtilen pozisyon butonunu bulur ve tıklar"""
-        try:
-            from selenium.webdriver.common.by import By
-            from selenium.webdriver.support.ui import WebDriverWait
-            from selenium.webdriver.support import expected_conditions as EC
-            from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
-            # Pozisyon buton mapping'i
-            button_mappings = {
-                'vs.All Mid / Wingers': ['Att Mid / Wingers', 'All Mid / Wingers', 'Wingers'],
-                'vs.Forwards': ['Forwards'],
-                'vs.Centre-Backs': ['Centre-Backs', 'Center-Backs'],
-                'vs.Fullbacks': ['Fullbacks'],
-                'vs.Goalkeepers': ['Goalkeepers']
-            }
-
-            button_texts = button_mappings.get(position_key, [position_key.replace('vs.', '')])
-
-            # Farklı selector'ları dene
-            selectors = [
-                # Button elementleri
-                "//button[contains(text(), '{}')]",
-                "//button[@title='{}']",
-                "//button[contains(@class, 'tooltip') and contains(text(), '{}')]",
-
-                # Link elementleri
-                "//a[contains(text(), '{}')]",
-                "//a[@title='{}']",
-
-                # Span elementleri (buton içinde)
-                "//span[contains(text(), '{}')]",
-
-                # Div elementleri (buton wrapper)
-                "//div[contains(@class, 'position') and contains(text(), '{}')]"
-            ]
-
-            for button_text in button_texts:
-                for selector_template in selectors:
-                    try:
-                        selector = selector_template.format(button_text)
-
-                        # Elementi bul
-                        element = WebDriverWait(self.driver, 5).until(
-                            EC.element_to_be_clickable((By.XPATH, selector))
-                        )
-
-                        # Eğer element zaten aktifse (selected/active class'ı varsa) tıklama
-                        if 'selected' in element.get_attribute('class') or 'active' in element.get_attribute('class'):
-                            logging.info(f"Pozisyon '{button_text}' zaten aktif")
-                            return True
-
-                        # JavaScript ile tıkla (daha güvenilir)
-                        self.driver.execute_script("arguments[0].click();", element)
-
-                        logging.info(f"Pozisyon butonu '{button_text}' tıklandı")
-                        return True
-
-                    except (TimeoutException, NoSuchElementException):
-                        continue
-
-            # Hiçbir buton bulunamazsa, mevcut pozisyonu kontrol et
-            logging.warning(f"Pozisyon butonu bulunamadı: {position_key}")
-
-            # Sayfa kaynak kodunu kontrol et (debug için)
-            page_source = self.driver.page_source
-            if any(text in page_source for text in button_texts):
-                logging.info(f"Pozisyon metni sayfada mevcut ama buton bulunamadı: {button_texts}")
-                # Mevcut durumu kabul et (belki zaten doğru pozisyon yüklü)
-                return True
-
-            return False
-
-        except Exception as e:
-            logging.error(f"Pozisyon buton tıklama hatası ({position_key}): {e}")
-            return False
-
-    def extract_current_scouting_data(self):
-        """Şu anda sayfada görünen scouting verilerini çıkarır - Gelişmiş"""
-        try:
-            from bs4 import BeautifulSoup
-            import time
-
-            # Kısa bir bekleme (veri stabilize olsun)
-            time.sleep(1)
-
-            # Selenium'dan HTML al
-            html = self.driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
-
-            scouting_data = {}
-
-            # Standard Stats tablosunu bul - daha geniş arama
-            table_selectors = [
-                'table[id*="standard"]',
-                'table.stats_table',
-                'table[class*="stats"]'
-            ]
-
-            standard_table = None
-            for selector in table_selectors:
-                standard_table = soup.select_one(selector)
-                if standard_table:
-                    break
-
-            if not standard_table:
-                logging.warning("İstatistik tablosu bulunamadı")
-                return {}
-
-            # Tablodan scouting verilerini çıkar
-            table_data = self.parse_scouting_table_enhanced(standard_table)
-
-            # Çıkarılan istatistikleri ana scouting_data'ya ekle
-            valid_count = 0
-            for stat_name, stat_values in table_data.items():
-                # Sadece geçerli istatistik isimlerini kabul et
-                if self.is_valid_stat_name(stat_name):
-                    scouting_data[stat_name] = stat_values
-                    valid_count += 1
-
-            logging.info(f"Toplam {valid_count} geçerli istatistik çıkarıldı")
-            return scouting_data
-
-        except Exception as e:
-            logging.error(f"Mevcut scouting veri çıkarma hatası: {e}")
-            return {}
-
-    def setup_selenium(self):
-        """Enhanced Selenium WebDriver setup with anti-detection"""
-        try:
-            from selenium import webdriver
-            from selenium.webdriver.chrome.options import Options
-            from webdriver_manager.chrome import ChromeDriverManager
-            from selenium.webdriver.chrome.service import Service
-
-            chrome_options = Options()
-
-            # Temel ayarlar
-            chrome_options.add_argument('--no-sandbox')
-            chrome_options.add_argument('--disable-dev-shm-usage')
-            chrome_options.add_argument('--disable-gpu')
-            chrome_options.add_argument('--window-size=1920,1080')
-            chrome_options.add_argument('--start-maximized')
-
-            # Anti-detection için
-            chrome_options.add_argument('--disable-web-security')
-            chrome_options.add_argument('--disable-features=VizDisplayCompositor')
-            chrome_options.add_argument('--disable-extensions')
-            chrome_options.add_argument('--disable-plugins')
-            chrome_options.add_argument('--no-first-run')
-            chrome_options.add_argument('--no-default-browser-check')
-            chrome_options.add_argument('--disable-default-apps')
-
-            # Resim yüklemeyi devre dışı bırak (hızlandırmak için)
-            chrome_options.add_argument('--disable-images')
-
-            # User agent
-            chrome_options.add_argument(
-                f'--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-
-            # Selenium algılamayı zorlaştır
-            chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            chrome_options.add_experimental_option('useAutomationExtension', False)
-
-            # Headless mode (isteğe bağlı)
-            if Settings.HEADLESS_BROWSER:
-                chrome_options.add_argument('--headless')
-
-            service = Service(ChromeDriverManager().install())
-            self.driver = webdriver.Chrome(service=service, options=chrome_options)
-
-            # WebDriver property'sini gizle
-            self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-
-            # Timeouts ayarla
-            self.driver.implicitly_wait(10)
-            self.driver.set_page_load_timeout(30)
-
-            logging.info("Selenium WebDriver başarıyla kuruldu")
-
-        except Exception as e:
-            logging.error(f"Selenium setup hatası: {e}")
-            self.driver = None
-
-    def parse_scouting_table_enhanced(self, table):
-        """Scouting tablosunu parse eder - Gelişmiş hata kontrolü ile"""
-        try:
-            scouting_data = {}
-
-            tbody = table.find('tbody')
-            if not tbody:
-                logging.warning("Tablo tbody bulunamadı")
-                return scouting_data
-
-            rows = tbody.find_all('tr')
-            logging.info(f"Toplam {len(rows)} satır bulundu")
-
-            for i, row in enumerate(rows):
-                try:
-                    cells = row.find_all(['td', 'th'])
-                    if len(cells) < 3:
-                        continue
-
-                    # İstatistik ismi
-                    stat_cell = cells[0]
-                    stat_name = self.utils.clean_text(stat_cell.get_text())
-
-                    # Per 90 değeri
-                    per90_text = cells[1].get_text().strip()
-                    per90_value = self.utils.extract_stat_value(per90_text)
-
-                    # Percentile değeri (bu pozisyona özel)
-                    percentile_text = cells[2].get_text().strip()
-                    percentile_value = self.utils.extract_percentile(percentile_text)
-
-                    # Daha sıkı validasyon
-                    if (stat_name and len(stat_name) > 2 and
-                            self.is_valid_stat_name(stat_name) and
-                            per90_text not in ['', '-', '—', 'N/A', None] and
-                            percentile_text not in ['', '-', '—', 'N/A', None] and
-                            per90_value is not None and percentile_value is not None):
-
-                        scouting_data[stat_name] = {
-                            'per90': per90_value,
-                            'percentile': percentile_value
-                        }
-
-                        # Debug: Her 5. istatistiği logla
-                        if i % 5 == 0:
-                            logging.debug(f"İstatistik {i}: {stat_name} = {percentile_value}%")
-
-                except Exception as e:
-                    logging.debug(f"Satır {i} parse hatası: {e}")
-                    continue
-
-            logging.info(f"Parse edildi: {len(scouting_data)} istatistik")
-            return scouting_data
-
-        except Exception as e:
-            logging.error(f"Tablo parse hatası: {e}")
-            return {}
-
-    def verify_active_position(self, soup, expected_position_key):
-        """Sayfada beklenen pozisyonun aktif olduğunu doğrular"""
-        try:
-            # Pozisyon seçici butonlarını bul
-            position_buttons = soup.find_all('button', class_='tooltip')
-            if not position_buttons:
-                # Alternatif: link olarak pozisyon seçiciler
-                position_buttons = soup.find_all('a', href=lambda x: x and 'position=' in x)
-
-            # Aktif pozisyonu bul
-            for button in position_buttons:
-                # Aktif buton (selected/active class'ı olan)
-                if 'selected' in button.get('class', []) or 'active' in button.get('class', []):
-                    button_text = button.get_text().strip()
-                    # Position key ile eşleşiyor mu kontrol et
-                    if self.normalize_position_key(button_text) == expected_position_key:
-                        return True
-
-            # Sayfa başlığından da kontrol et
-            title_elem = soup.find('h1')
-            if title_elem:
-                title_text = title_elem.get_text()
-                if expected_position_key.replace('vs.', '').strip() in title_text:
-                    return True
-
-            # Meta description'dan kontrol et
-            meta_desc = soup.find('meta', {'name': 'description'})
-            if meta_desc:
-                desc_content = meta_desc.get('content', '')
-                if expected_position_key.replace('vs.', '').strip().lower() in desc_content.lower():
-                    return True
-
-            return False
-
-        except Exception as e:
-            logging.error(f"Pozisyon doğrulama hatası: {e}")
-            return True  # Hata durumunda devam et
-
-    def normalize_position_key(self, button_text):
-        """Buton textini position key'e çevirir"""
-        try:
-            text_lower = button_text.lower().strip()
-
-            # Position key mapping'i
-            mapping = {
-                'att mid / wingers': 'vs.All Mid / Wingers',
-                'all mid / wingers': 'vs.All Mid / Wingers',
-                'midfielders': 'vs.All Mid / Wingers',
-                'wingers': 'vs.All Mid / Wingers',
-                'forwards': 'vs.Forwards',
-                'centre-backs': 'vs.Centre-Backs',
-                'center-backs': 'vs.Centre-Backs',
-                'fullbacks': 'vs.Fullbacks',
-                'goalkeepers': 'vs.Goalkeepers'
-            }
-
-            for key, value in mapping.items():
-                if key in text_lower:
-                    return value
-
-            return f"vs.{button_text}"
-
-        except Exception:
-            return button_text
-
-    def get_possible_positions(self, detailed_position):
-        """Oyuncunun mümkün pozisyonlarını belirle - FBRef buton sırasına göre"""
-        try:
-            if not detailed_position:
-                return ['vs.All Mid / Wingers']  # Default
-
-            detailed_pos = detailed_position.lower()
-
-            # FBRef'teki buton sırası önemli - en uygun pozisyon önce
-            position_mappings = {
-                # Forward/Winger hibrit - önce winger sonra forward
-                'fw-mf': ['vs.All Mid / Wingers', 'vs.Forwards'],
-                'mf-fw': ['vs.All Mid / Wingers', 'vs.Forwards'],
-
-                # Forward pozisyonları
-                'fw': ['vs.Forwards', 'vs.All Mid / Wingers'],
-                'striker': ['vs.Forwards'],
-                'cf': ['vs.Forwards'],
-                'st': ['vs.Forwards'],
-
-                # Wing pozisyonları
-                'winger': ['vs.All Mid / Wingers'],
-                'lw': ['vs.All Mid / Wingers'],
-                'rw': ['vs.All Mid / Wingers'],
-                'wing': ['vs.All Mid / Wingers'],
-
-                # Midfielder pozisyonları
-                'mf': ['vs.All Mid / Wingers'],
-                'midfielder': ['vs.All Mid / Wingers'],
-                'cm': ['vs.All Mid / Wingers'],
-                'cdm': ['vs.All Mid / Wingers'],
-                'cam': ['vs.All Mid / Wingers'],
-                'dm': ['vs.All Mid / Wingers'],
-                'am': ['vs.All Mid / Wingers'],
-
-                # Defender pozisyonları
-                'df': ['vs.Centre-Backs', 'vs.Fullbacks'],
-                'defender': ['vs.Centre-Backs', 'vs.Fullbacks'],
-                'cb': ['vs.Centre-Backs'],
-                'lb': ['vs.Fullbacks'],
-                'rb': ['vs.Fullbacks'],
-                'wb': ['vs.Fullbacks'],
-                'lwb': ['vs.Fullbacks'],
-                'rwb': ['vs.Fullbacks'],
-
-                # Goalkeeper
-                'gk': ['vs.Goalkeepers'],
-                'goalkeeper': ['vs.Goalkeepers']
-            }
-
-            positions = []
-
-            # Tam eşleşme ara
-            for pos_key, pos_list in position_mappings.items():
-                if pos_key in detailed_pos:
-                    for pos in pos_list:
-                        if pos not in positions:
-                            positions.append(pos)
-                    break  # İlk eşleşmeyi kullan
-
-            # Eğer tam eşleşme bulunamazsa, kısmi eşleşme
-            if not positions:
-                for pos_key, pos_list in position_mappings.items():
-                    if any(part in detailed_pos for part in pos_key.split('-')):
-                        for pos in pos_list:
-                            if pos not in positions:
-                                positions.append(pos)
-
-            # Hiçbir şey bulunamazsa default
-            if not positions:
-                positions = ['vs.All Mid / Wingers']
-
-            return positions
-
-        except Exception as e:
-            logging.error(f"Pozisyon belirleme hatası: {e}")
-            return ['vs.All Mid / Wingers']
-
-    def close(self):
-        """Clean up resources - Selenium driver dahil"""
-        try:
-            if hasattr(self, 'driver') and self.driver:
-                self.driver.quit()
-                logging.info("Selenium driver kapatıldı")
-            if self.session:
-                self.session.close()
-        except Exception as e:
-            logging.error(f"Kaynak kapatma hatası: {e}")
-
-    def build_scouting_url(self, fbref_id, player_name, position_key):
-        """Pozisyon bazlı scouting URL'si oluştur - Gelişmiş"""
-        try:
-            # URL formatı: /en/players/{id}/scout/365_m1/{name}-Scouting-Report
-            # Pozisyon parametresi: ?position={position_key}
-
-            base_url = f"{Settings.FBREF_BASE_URL}/en/players/{fbref_id}/scout/365_m1/{player_name}-Scouting-Report"
-
-            # Pozisyon parametresini encode et
-            import urllib.parse
-            encoded_position = urllib.parse.quote(position_key)
-
-            full_url = f"{base_url}?position={encoded_position}"
-
-            # Debug için URL'yi logla
-            logging.debug(f"Scouting URL oluşturuldu: {full_url}")
-
-            return full_url
-
-        except Exception as e:
-            logging.error(f"Scouting URL oluşturma hatası: {e}")
-            return f"{Settings.FBREF_BASE_URL}/en/players/{fbref_id}/scout/365_m1/{player_name}-Scouting-Report"
-
-    def get_position_display_name(self, position_key):
-        """Position key'den görüntüleme ismi çıkar"""
-        try:
-            display_mappings = {
-                'vs.Forwards': 'Forward',
-                'vs.All Mid / Wingers': 'Midfielder/Winger',
-                'vs.Centre-Backs': 'Centre-Back',
-                'vs.Fullbacks': 'Fullback',
-                'vs.Goalkeepers': 'Goalkeeper'
-            }
-
-            return display_mappings.get(position_key, position_key.replace('vs.', ''))
-
-        except Exception:
-            return position_key
-
-    def extract_general_scouting_report(self, player, player_url):
-        """Genel scouting raporunu çek (pozisyon belirtilmemiş)"""
-        try:
             fbref_id = self.utils.extract_fbref_id(player_url)
             if not fbref_id:
                 return
@@ -1773,7 +996,7 @@ class PlayerScraper(BaseScraper):
 
             soup = self.get_page(scouting_url)
             if not soup:
-                logging.warning(f"Genel scouting raporu getirilemedi: {scouting_url}")
+                logging.warning(f"Scouting raporu getirilemedi: {scouting_url}")
                 return
 
             scouting_data = {}
@@ -1791,69 +1014,71 @@ class PlayerScraper(BaseScraper):
                     if self.is_valid_stat_name(stat_name):
                         scouting_data[stat_name] = stat_values
 
+            # PlayerModel'e scouting verilerini set et
+            player.data['scoutingReport'] = scouting_data
+
             if scouting_data:
-                # Ana pozisyona genel scouting verilerini ekle
-                main_position = player.determine_main_position()
-                player.set_scouting_report_flat(scouting_data, main_position)
-                logging.info(f"Genel scouting raporu eklendi ({main_position}): {len(scouting_data)} stat")
+                logging.info(f"Scouting raporu tamamlandı: {len(scouting_data)} geçerli stat")
+            else:
+                logging.warning("Hiç scouting verisi çekilemedi")
 
         except Exception as e:
-            logging.error(f"Genel scouting raporu çekme hatası: {e}")
+            logging.error(f"Scouting raporu çekme hatası: {e}")
 
     def is_valid_stat_name(self, stat_name):
-        """İstatistik isminin geçerli olup olmadığını kontrol eder"""
-        try:
-            if not stat_name or not isinstance(stat_name, str):
-                return False
+                """İstatistik isminin geçerli olup olmadığını kontrol eder"""
+                try:
+                    if not stat_name or not isinstance(stat_name, str):
+                        return False
 
-            stat_name_clean = stat_name.strip()
+                    stat_name_clean = stat_name.strip()
 
-            # Boş string kontrolü
-            if not stat_name_clean:
-                return False
+                    # Boş string kontrolü
+                    if not stat_name_clean:
+                        return False
 
-            # Sadece sayı olanları reddet
-            if stat_name_clean.isdigit():
-                return False
+                    # Sadece sayı olanları reddet
+                    if stat_name_clean.isdigit():
+                        return False
 
-            # Takım isimlerini reddet (büyük harfle başlayan ve birden fazla kelime içeren)
-            team_indicators = [
-                'Liverpool', 'Arsenal', 'Manchester', 'Chelsea', 'Barcelona', 'Real Madrid',
-                'Bayern Munich', 'Paris Saint-Germain', 'Juventus', 'Milan', 'Inter',
-                'Atletico', 'Napoli', 'Roma', 'Lazio', 'Dortmund', 'Leipzig',
-                'Marseille', 'Monaco', 'Lyon', 'United', 'City', 'FC', 'Union',
-                'Whitecaps', 'Pride', 'Wave', 'Spirit', 'Current', 'Cincinnati'
-            ]
+                    # Takım isimlerini reddet (büyük harfle başlayan ve birden fazla kelime içeren)
+                    team_indicators = [
+                        'Liverpool', 'Arsenal', 'Manchester', 'Chelsea', 'Barcelona', 'Real Madrid',
+                        'Bayern Munich', 'Paris Saint-Germain', 'Juventus', 'Milan', 'Inter',
+                        'Atletico', 'Napoli', 'Roma', 'Lazio', 'Dortmund', 'Leipzig',
+                        'Marseille', 'Monaco', 'Lyon', 'United', 'City', 'FC', 'Union',
+                        'Whitecaps', 'Pride', 'Wave', 'Spirit', 'Current', 'Cincinnati'
+                    ]
 
-            # Takım ismi kontrolü
-            for team_indicator in team_indicators:
-                if team_indicator.lower() in stat_name_clean.lower():
+                    # Takım ismi kontrolü
+                    for team_indicator in team_indicators:
+                        if team_indicator.lower() in stat_name_clean.lower():
+                            return False
+
+                    # Geçerli istatistik kelimelerini kontrol et
+                    valid_stat_keywords = [
+                        'goals', 'assists', 'shots', 'passes', 'tackles', 'interceptions',
+                        'blocks', 'clearances', 'touches', 'carries', 'take-ons', 'aerials',
+                        'fouls', 'cards', 'xg', 'xa', 'npxg', 'sca', 'gca', 'progressive',
+                        'completion', 'distance', 'penalty', 'crosses', 'corners', 'through',
+                        'live-ball', 'dead-ball', 'switches', 'final third', 'area',
+                        'challenged', 'won', 'lost', 'attempted', 'successful', 'percentage',
+                        'miscontrols', 'dispossessed', 'recoveries', 'offsides', 'errors'
+                    ]
+
+                    # En az bir geçerli kelime içermeli
+                    stat_lower = stat_name_clean.lower()
+                    has_valid_keyword = any(keyword in stat_lower for keyword in valid_stat_keywords)
+
+                    # Özel durumlar: kısa ama geçerli istatistikler
+                    short_valid_stats = ['%', 'per90', 'percentile']
+                    is_short_valid = any(short_stat in stat_lower for short_stat in short_valid_stats)
+
+                    return has_valid_keyword or is_short_valid
+
+                except Exception as e:
+                    logging.error(f"Stat name validation error: {e}")
                     return False
-
-            # Geçerli istatistik kelimelerini kontrol et
-            valid_stat_keywords = [
-                'goals', 'assists', 'shots', 'passes', 'tackles', 'interceptions',
-                'blocks', 'clearances', 'touches', 'carries', 'take-ons', 'aerials',
-                'fouls', 'cards', 'xg', 'xa', 'npxg', 'sca', 'gca', 'progressive',
-                'completion', 'distance', 'penalty', 'crosses', 'corners', 'through',
-                'live-ball', 'dead-ball', 'switches', 'final third', 'area',
-                'challenged', 'won', 'lost', 'attempted', 'successful', 'percentage',
-                'miscontrols', 'dispossessed', 'recoveries', 'offsides', 'errors'
-            ]
-
-            # En az bir geçerli kelime içermeli
-            stat_lower = stat_name_clean.lower()
-            has_valid_keyword = any(keyword in stat_lower for keyword in valid_stat_keywords)
-
-            # Özel durumlar: kısa ama geçerli istatistikler
-            short_valid_stats = ['%', 'per90', 'percentile']
-            is_short_valid = any(short_stat in stat_lower for short_stat in short_valid_stats)
-
-            return has_valid_keyword or is_short_valid
-
-        except Exception as e:
-            logging.error(f"Stat name validation error: {e}")
-            return False
 
     def determine_scouting_category(self, table, table_id):
         """Tablodan scouting kategorisini belirler"""
@@ -2044,7 +1269,7 @@ class PlayerScraper(BaseScraper):
             return 'standard'
 
     def parse_scouting_table(self, table):
-        """Scouting tablosunu parse eder - Pozisyon özel percentile'lar ile"""
+        """Scouting tablosunu parse eder - Gelişmiş filtreleme ile"""
         try:
             scouting_data = {}
 
@@ -2065,7 +1290,7 @@ class PlayerScraper(BaseScraper):
                     per90_text = cells[1].get_text().strip()
                     per90_value = self.utils.extract_stat_value(per90_text)
 
-                    # Percentile değeri (bu pozisyona özel)
+                    # Percentile değeri
                     percentile_text = cells[2].get_text().strip()
                     percentile_value = self.utils.extract_percentile(percentile_text)
 
@@ -2076,7 +1301,7 @@ class PlayerScraper(BaseScraper):
                             percentile_text not in ['', '-', '—']):
                         scouting_data[stat_name] = {
                             'per90': per90_value,
-                            'percentile': percentile_value  # Bu pozisyona özel percentile
+                            'percentile': percentile_value
                         }
 
             return scouting_data
